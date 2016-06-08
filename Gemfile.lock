@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    json (1.8.3)
+    rake (11.1.2)
+    rdoc (4.2.2)
+      json (~> 1.4)
+    xml-simple (1.1.5)
+    yard (0.8.7.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rake
+  rdoc
+  xml-simple
+  yard
+
+BUNDLED WITH
+   1.12.3
