@@ -2,6 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     json (1.8.3)
+    mini_portile2 (2.1.0)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    pkg-config (1.1.7)
     rake (11.1.2)
     rdoc (4.2.2)
       json (~> 1.4)
@@ -12,6 +17,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  nokogiri
   rake
   rdoc
   xml-simple
