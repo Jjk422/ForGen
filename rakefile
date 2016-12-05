@@ -10,7 +10,7 @@ task :yard do
   YARD::Rake::YardocTask.new do |t|
     # Files to include in yard documentation.
     t.files   = ["#{DIR_ROOT}/library/**/*.rb",
-                 "#{DIR_ROOT}/ForGen.rb"
+                 "#{DIR_ROOT}/forgen.rb"
     ]
     # Extra options for the yard documentation
     t.options = [

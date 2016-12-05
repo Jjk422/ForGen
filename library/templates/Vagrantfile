@@ -1,0 +1,57 @@
+Vagrant.require_version "> 1.1"
+Vagrant.configure("2") do |config|
+  # config.vm.boot_timeout = Defaults '600'
+  # config.vm.box = This configures what box the machine will be brought up against.
+  #   The value here should be the name of an installed box or a shorthand name of a
+  #   box in HashiCorp's Atlas.
+  config.vm.box = 'test'
+  # config.vm.box_check_update = false
+  # config.vm.box_download_insecure = false
+  # config.vm.box_download_location_trusted = false
+  # config.vm.box_url = file://#{Path to local basebox file}
+  config.vm.box_url = 'file:///home/user/Desktop/Baseboxes/Windows_2008_metasploitable/windows_2008_server_metasploitable.box'
+  # config.vm.box_url = http://atlas.hashicorp.com/#{Account name}/boxes/#{Basebox name}/versions/#{Version number}/providers/virtualbox.box
+  # config.vm.box_version = #{Version number, defaults to latest}
+  # config.vm.communicator = 'Default ssh' / 'winrm' for windows guests
+  # config.vm.graceful_halt_timeout = Default '60' seconds
+  # config.vm.guest = Defaults to ':linux' / windows ':windows'
+  # config.vm.hostname = Defaults to 'nil' so vagrant  / String changes machine hostname
+  # config.vm.network = TODO: networking configuration
+  # config.vm.post_up_message =
+  # config.vm.provider = VirtualBox
+  # config.vm.provision =
+  # config.vm.synced_folder =
+  # config.vm.usable_port_range = Defaults to '2200..2250'
+
+  # config.winrm, requires config.vm.communicaton to be set to winrm
+  # config.winrm.username = Default set to 'vagrant'
+  # config.winrm.password = Default set to 'vagrant'
+  # config.winrm.host = Default set to 'empty' provider usually figures this out for you / URL or Hostname of WinRM service
+  # config.winrm.port = Default set to '5985'
+  # config.winrm.guest_port =
+  # config.winrm.transport = Default set to ':negotiate' / other options include :negotiate, ssl and :plaintext
+  # config.winrm.basic_auth_only = Default set to 'false'
+  # config.winrm.execution_time_limit = Default set to '2' hours
+
+  # config.vagrant
+  # config.vagrant.host = Default set to ':detect' / should only be manually set if auto-detection fails
+
+  # config.vm.provision
+  # config.vm.provision "puppet" do |puppet|
+  #   # puppet.manifest_file = Defaults to 'default.pp'
+  #   # manifests_path = Defaults to 'manifests'
+  #   # module_path = [Directory containing puppet modules]
+  #   # environment = [Name of the puppet environment]
+  #   # environment_path = [Path to the directory containing environment files on the host disk]
+  #   # environment_variables = {Hash} [A hash of string key/value pairs to be set as environment variables before the puppet apply run]
+  #   # synced_folder_type = Defaults to "#{Default synced folder type}"
+  #   # synced_folder_args = {Array} [Arguments that are passed to the folder sync]
+  #   # temp_dir = [The directory where all the data associated with the Puppet run (manifest files, modules, etc.) will be stored on the guest machine]
+  #   # working_directory = [Path in the guest that will be the working directory when Puppet is executed]
+  #
+  #   puppet.facter = {
+  #       "vagrant" => "1"
+  #   }
+  #
+  #   puppet.options = "--verbose --debug"
+end

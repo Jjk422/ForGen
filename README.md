@@ -1,2 +1,3 @@
 # ForGen
-Forensic generator
+## What is it
+ForGen is a 

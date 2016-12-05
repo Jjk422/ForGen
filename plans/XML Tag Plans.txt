@@ -1,0 +1,64 @@
+Module Tags
+    System:
+        Module Type
+        Module Name
+        Module Path
+        Module Author
+
+    Evidence:
+        Module Type
+        Module Name
+        Module Path
+        Module Author
+
+    Software:
+        Module Type
+        Module Name
+        Module Path
+        Module Author
+
+Crime:
+    Type of Crime:
+        Corporate
+        Civil
+        Criminal
+    Name of Crime
+    Number of Victims
+    Location of Crime
+
+People:
+    Victims:
+        Number of Victims
+        Victim Names
+        Victim Ages
+        Victim Home Addresses
+
+    Suspects:
+        Number of Suspects
+        Suspect Names
+        Suspect Ages
+        Suspect Home Addresses
+
+    Witnesses:
+        Number of Witnesses
+        Witnesses Names
+        Witnesses Ages
+        Witnesses Home Addresses
+
+    Perpetrators:
+        Number of Perpetrators
+        Perpetrators Names
+        Perpetrators Ages
+        Perpetrators Home Addresses
+
+Times:
+    System Based Times:
+        System Time
+        System Timezone
+    Local Based Times:
+        Local Time
+        Local timezone
+    Image Based Times:
+        Image Start Time
+        Image Finish Time
+        Reset All Image Times

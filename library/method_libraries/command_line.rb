@@ -23,7 +23,7 @@
 def display_help
   puts '--- Welcome to ForGen, the home of custom image creation ---'
   puts 'ForGen command line structure'
-  puts 'ruby ForGen.rb [options]'
+  puts 'ruby forgen.rb [options]'
   puts
   puts '[options]'
   puts "-h  --help\t\t\t Display this help screen"

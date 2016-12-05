@@ -27,9 +27,6 @@ class Command_line_arguments
     @colour = Colour.new
   end
 
-  def disable_colour
-    @colour.disable_colours
-  end
 
   # def run_arguments(p)
   #   if (p.length == 0)
@@ -74,96 +71,5 @@ class Command_line_arguments
   #   end
   # end
 
-  # Display help message for command line inputs.
-  def command_help
-    @colour.output('puts', 'bold_help', '--- Welcome to ForGen, the home of custom image creation ---')
-    @colour.output('puts', 'text_help', 'ForGen command line structure')
-    @colour.output('puts', 'text_help', 'ruby ForGen.rb [options]')
-    @colour.output('puts', 'text_help', '')
-    @colour.output('puts', 'bold_help', '[options]')
-    @colour.output('puts', 'text_help', "-h  --help\t\t\t Display this help screen")
-    @colour.output('puts', 'text_help', "-m  --more [argument]\t\t Find more about the other options")
-    @colour.output('puts', 'text_help', "-mt --make-template\t\t Make all required Image template files")
-    @colour.output('puts', 'text_help', "-mi --make-image [project num]\t Make Image file from saved template")
-    # @colour.output('puts', 'text_help', "-mvi --make-virtualbox-image [project num]\t Make virtualbox image from saved template")
-    # @colour.output('puts', 'text_help', "-mfi --make-virtualbox-image [project num]\t Make forensic image from saved template")
-    @colour.output('puts', 'text_help', "-ma --make-all\t\t\t Make both template files and image file")
-  end
 
-  # Display help message for a specific command line input.
-  def display_help_more (arguments)
-    arguments.shift
-    arguments.each do |argument|
-      case argument
-        when '-h', '--help'
-          @colour.output('puts', 'bold_help', '-h --help')
-          @colour.output('puts', 'text_help', "\t  Displays help screen with all common commands
-          and a short description")
-
-        when '-m', '--more'
-          @colour.output('puts', 'bold_help', '-m --more')
-          @colour.output('puts', 'text_help', "\t  Displays a more elaborate help section for each
-          command after the -m or --more command")
-
-        when '-mt', '--make-template'
-          @colour.output('puts', 'bold_help', '-mt --make-template')
-          @colour.output('puts', 'text_help', "\t  Make Image template
-          {make all vagrant and puppet file templates
-          to be used in project and stored in project
-          directory (with correct number, e.g. project1)}
-          [no parameters accepted]")
-
-        when '-mi', '--make-image'
-          @colour.output('puts', 'bold_help', '-mi --make-image')
-          @colour.output('puts', 'text_help', "\t  Make Image file from saved template
-          {make image file from all template files for an existing project}
-          [1 parameter accepted - (existing_project_number/existing_project_name)]")
-
-        when '-ma', '--make-all'
-          @colour.output('puts', 'bold_help', '-ma --make-all')
-          @colour.output('puts', 'text_help', "\t  Make both template files and image file
-          {make both the project template files and the
-          final image file based on the created project}
-          [no parameters accepted]")
-
-        when '-mt', '--more'
-          #   TODO: 1) Validate schema
-          #   TODO: 2) Get case data from xml file
-          #   TODO: 3) Build vagrant, puppet and human readable files
-          @colour.output('puts', 'bold_help', '-mt --make-template')
-          @colour.output('puts', 'text_help', "\t  Make template files that can generate images
-          {make the project template files based on the default or specified case files}
-          [no parameters accepted]")
-
-        when '-mvi', '--make-virtualbox-image'
-          # TODO: Fill in more help for -mvi (--make-virtualbox-image)
-          @colour.output('puts', 'bold_help', '-mvi --make-virtualbox-image')
-          @colour.output('puts', 'text_help', "\t  TODO
-          {TODO}
-          [no parameters accepted]")
-        when '-mfi', '--make-forensic-image'
-          # TODO: Fill in more help for -mfi (--make-forensic-image)
-          @colour.output('puts', 'bold_help', '-mvi --make-virtualbox-image')
-          @colour.output('puts', 'text_help', "\t  TODO
-          {TODO}
-          [no parameters accepted]")
-        when '--validate-case-file'
-          # TODO: Fill in more help for --validate-case-file
-          @colour.output('puts', 'bold_help', '-mvi --make-virtualbox-image')
-          @colour.output('puts', 'text_help', "\t  TODO
-          {TODO}
-          [no parameters accepted]")
-        when '--list-all-commands'
-          # TODO: Fill in more help for --list-all-commands
-          @colour.output('puts', 'bold_help', '--list-all-commands')
-          @colour.output('puts', 'text_help', "\t  TODO
-          {TODO}
-          [no parameters accepted]")
-        else
-          # puts "Argument #{argument} not recognised"
-          @colour.output('puts', 'text_error', "#{argument} \n\t  Argument #{argument} not recognised")
-        # display_help
-      end
-    end
-  end
 end

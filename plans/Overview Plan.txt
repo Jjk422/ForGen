@@ -1,0 +1,44 @@
+Options
+Run -- Complete full run-through, Building the following:
+    1) System configuration, including vagrant file and puppet file
+    2) Test sheets, containing questions to be answered
+    3) Mark sheets, containing answers to questions on the test sheets
+    4) Building virtual machines in VirtualBox
+    5) Convert the built VirtualBox virtual machines into forensic image file
+
+Build Configuration -- Build the configuration for the system, containing the vagrantFile and puppetFile
+    Get VirtualBox configuration values:
+    Memory amount -- Amount of memory to be allocated for VM
+    Processor count -- Amount of processors to be allocated for VM
+    Processor execution cap -- Maximum processor usage
+
+Build Question sheets
+    Build Question sheets based on evidence modules, will be:
+    Modular, can pick and remove multiple questions
+    Dynamic, questions change to match variables, e.g suspect name
+    Parsable with answer sheet to allow marking of the images
+
+    --number-of-questions [number of questions to include] -- number of questions to be given in the question sheet
+    --number-of-questions-per-section [{section}+{number of questions to include}]
+    --maximum-mark [maximum mark]
+
+Build Answer sheets
+    Answer sheets in computer readable format as well as human readable format.
+    Contain answers to all questions, can be parsed with question sheet to allow marking of the images.
+
+Build VMs
+    Build the virtual machines from the vagrantFile and puppetFile configuration files.
+
+Build Forensic Image
+    Convert a specific amount of the VirtualBox virtual machines into Forensic images.
+
+    Sub options:
+    --forensic-image-type -- image type of the forensic image to be generated (DD, E01, AFF)
+
+Main commands:
+run
+build-config
+build-questions
+build-answers
+build-vms
+build-image

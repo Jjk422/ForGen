@@ -1,0 +1,51 @@
+Internet:
+    Internet Explorer
+    Firefox
+    Chrome
+        Cookies
+        History:
+            Web pages Visited
+            Web page Timestamps
+        Downloads:
+            Page Downloaded From
+            Download Size
+            Download Hash
+            Download Time
+
+Registry:
+    SAM:
+        F File
+        V File
+    NTUSER.dat
+    SECURITY
+    SOFTWARE:
+        CurrentVersion
+        UserAccess
+    DEFAULT
+
+Link Files:
+    File Location
+    Drive Location
+    Time/Date of Deletion/Modification/Creation/Usage
+    Used Number
+
+Time Stamps:
+    Created Time
+    Modification Time
+    Deletion Time
+    Accessed Time
+
+Recycle Bin:
+    Info2
+
+Restore Points:
+    Creation Date
+    File Changes
+
+Users:
+    Create User
+    Delete User
+    Modify User
+    Add/Remove Password
+    Modify Password
+    Change User Files
