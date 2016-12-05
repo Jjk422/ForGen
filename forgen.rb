@@ -215,23 +215,22 @@ end
 
 def make_config(opts)
   @colour.notify "Making ForGen configuration files"
-  if file
 end
 
 def make_virtualbox_image(opts)
-
+  @colour.notify "Making virtualbox image from ForGen configuration files"
 end
 
 def make_forensics_image(opts)
-
+  @colour.notify "Making forenisc image from virtualbox image"
 end
 
 def make_test_sheets(opts)
-
+  @colour.notify "Making test sheets"
 end
 
 def make_mark_sheets(opts)
-
+  @colour.notify "Making mark sheets"
 end
 
 if ARGV.length < 1
