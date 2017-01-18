@@ -1,0 +1,13 @@
+ForGen
+
+*** Vagrant basebox creator ***
+Read case input --> Build packer VM --> Convert packer VM to vagrant basebox --> Delete packer VM
+
+*** VirtualBox VM generation ***
+Read case input --> Build packer VM --> Convert packer VM to Vagrant basebox --> Delete Packer VM --> Build Vagrant VM
+
+*** Forensic image generation ***
+Read case input --> Build Packer VM --> Convert packer VM to Vagrant basebox --> Delete packer VM --> Build Vagrant VM --> Convert Vagrant VM to forensic image [E01, RAW, AFF] --> Delete Vagrant VM
+
+*** Disk write output ***
+Read case input --> Build Packer VM --> Convert packer VM to Vagrant basebox --> Delete Packer VM --> Build Vagrant VM --> Convert Vagrant VM to ISO file --> Delete Vagrant VM --> Check physical disk and forensic image sizes (error if disk too small, partition enlarge option if disk too large) --> Write forensic image to given disk
