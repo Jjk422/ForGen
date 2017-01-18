@@ -1,0 +1,102 @@
+<case>
+
+  <system>
+    <information>
+      <drive>
+        <name>C</name>
+        <size>124</size>
+      </drive>
+      <drive>
+        <name>D</name>
+        <size>124</size>
+      </drive>
+    </information>
+
+    <crime>
+      <type>criminal</type>
+      <charge>robbery</charge>
+    </crime>
+
+    <people>
+      <perpetrator>
+        <name>Bob</name>
+        <age>28</age>
+        <connections>Jenna</connections>
+        <email>Bob@gmail.com</email>
+      </perpetrator>
+      <victim>
+        <name>Jenna</name>
+        <age>21</age>
+        <connections>Bob</connections>
+        <email>Jenna@gmail.com</email>
+      </victim>
+    </people>
+
+    <places>
+      <perpetrators_abode>
+        <address>fwa</address>
+      </perpetrators_abode>
+      <victims_abode>
+        <address>af</address>
+      </victims_abode>
+      <crime_location>
+        <address>asf</address>
+      </crime_location>
+    </places>
+
+    <time>
+      <!-- TODO: Add timezone-->
+      <!-- TODO: Add time crime took place-->
+      <!-- TODO: Add image finish time -->
+      <!-- TODO: Add time when perpetrator caught -->
+      <system_time></system_time>
+      <lead_time></lead_time>
+      <lead_crime_time></lead_crime_time>
+    </time>
+
+    <modules>
+      <module>
+        <!-- TODO: Ensure modules with path element are always selected -->
+        <author>Jason Keighley</author>
+        <type>software</type>
+        <category>languages</category>
+        <name>ruby</name>
+        <path>software/languages/ruby</path>
+        <description>Installs the ruby language</description>
+      </module>
+
+      <module>
+        <author>Jason Keighley</author>
+        <type>forensics</type>
+        <category>timestamp</category>
+        <name>change_timestamp</name>
+        <path>system/timestamp/change_timestamp</path>
+        <description></description>
+      </module>
+
+      <module>
+        <author>Jason Keighley</author>
+        <type>software</type>
+        <category>text_editor</category>
+        <name>notepad++</name>
+        <version></version>
+        <path>software/text_editor/notepad++</path>
+        <description>Installs notepad++</description>
+      </module>
+
+      <module>
+        <author>Jason Keighley</author>
+        <type>basebox</type>
+        <category>windows</category>
+        <name>windows_server_2008_r2</name>
+        <distro>server</distro>
+        <version>2008</version>
+        <path>baseboxes/windows/windows_server_2008_r2</path>
+        <url>file:///home/user/Desktop/Baseboxes/Windows_2008_metasploitable/windows_2008_server_metasploitable.box</url>
+        <description>Windows server 2008 r2</description>
+      </module>
+    </modules>
+
+  </system>
+
+</case>

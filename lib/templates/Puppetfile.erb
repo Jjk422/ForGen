@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+forge "https://forgeapi.puppetlabs.com"
+
+# Load Build modules
+mod 'puppetlabs-stdlib', '4.14.0'
+mod 'puppetlabs-windows', '3.0.0'
+
+# Load custom modules
+<% @config_modules.each do | provisioner, modules | -%>
+    <% case provisioner
+       when :Puppet -%>
+      <% modules.each do | module_name, module_information| -%>
+mod 'ForGen-<%= module_name %>', :path => '<%= DIR_MODULES %>/<%= module_information[:path] %>'
+      <% end -%>
+    <% end -%>
+<% end -%>
+
+# Load cleanup modules

@@ -1,9 +1,11 @@
 source 'https://rubygems.org'
-#production gems go here
-gem 'xml-simple'
+# Production gems go here
+gem 'fileutils'
 gem 'nokogiri'
+gem 'nori'
+gem 'librarian-puppet'
 
-#development only gems go here
+# Development only gems go here
 group :test, :development do
   gem 'rake'
   gem 'rdoc'

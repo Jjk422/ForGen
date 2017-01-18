@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="case">
+    <xs:complexType>
+      <xs:sequence>
+
+        <xs:element name="system" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+
+              <xs:element name="information" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="drive" minOccurs="1" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="name" type="xs:string" minOccurs="0"/>
+                          <xs:element name="size" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="crime" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="type" type="xs:string" minOccurs="0"/>
+                    <xs:element name="charge" type="xs:string" minOccurs="0"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+
+              <xs:element name="people" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="perpetrator" minOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="name" type="xs:string" minOccurs="0"/>
+                          <xs:element name="age" type="xs:int" minOccurs="0"/>
+                          <xs:element name="connections" type="xs:string" minOccurs="0"/>
+                          <xs:element name="email" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="victim" minOccurs="1">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="name" type="xs:string" minOccurs="0"/>
+                          <xs:element name="age" type="xs:int" minOccurs="0"/>
+                          <xs:element name="connections" type="xs:string" minOccurs="0"/>
+                          <xs:element name="email" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="places" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="perpetrators_abode">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="address" type="xs:string"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="victims_abode">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="address" type="xs:string"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="crime_location">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="address" type="xs:string"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="time" minOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <!-- TODO: Need to change element types to xs:time or xs:datetime-->
+                    <xs:element name="system_time" type="xs:string" minOccurs="0"/>
+                    <xs:element name="lead_time" type="xs:string" minOccurs="0"/>
+                    <xs:element name="lead_crime_time" type="xs:string" minOccurs="0"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="modules" minOccurs="1" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="module" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="author" type="xs:string" minOccurs="0"/>
+                          <xs:element name="type" type="xs:string" minOccurs="0"/>
+                          <xs:element name="category" type="xs:string" minOccurs="0"/>
+                          <xs:element name="name" type="xs:string" minOccurs="0"/>
+                          <xs:element name="distro" type="xs:string" minOccurs="0"/>
+                          <xs:element name="version" type="xs:string" minOccurs="0"/>
+                          <xs:element name="path" type="xs:string" minOccurs="0"/>
+                          <xs:element name="url" type="xs:string" minOccurs="0"/>
+                          <xs:element name="description" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+
+              </xs:element>
+
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

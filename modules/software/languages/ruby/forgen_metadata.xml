@@ -1,0 +1,12 @@
+<software>
+  <!-- Module information-->
+  <author>Jason Keighley</author>
+  <type>software</type>
+  <category>languages</category>
+  <name>ruby</name>
+  <version></version>
+  <path>software/languages/ruby</path>
+  <description>Installs the ruby language</description>
+  <provider>Puppet</provider>
+  <manifest_file>init.pp</manifest_file>
+</software>
