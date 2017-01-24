@@ -11,6 +11,7 @@ require_relative "lib/constants"
 
 # Class libraries
 require "#{DIR_CLASSES}/colour"
+require "#{DIR_CLASSES}/moduleSelector"
 require "#{DIR_CLASSES}/outputGenerator"
 require "#{DIR_CLASSES}/templateGenerator"
 require "#{DIR_CLASSES}/XMLParse"
@@ -18,11 +19,13 @@ require "#{DIR_CLASSES}/XMLParse"
 # Method libraries
 require "#{DIR_METHOD_LIBRARIES}/schema.rb"
 
-@colour = Colour.new
+#################################################
 
 def disable_colour
   @colour.disable_colours
 end
+
+#################################################
 
 # Display help message for command line inputs.
 def command_help
@@ -44,6 +47,10 @@ def command_help
 
   @colour.help '[options: cases]'
   @colour.help "--case-path\t\t\t The path to the case file to use"
+  @colour.help ''
+
+  @colour.help '[options: projects]'
+  @colour.help "--delete-all-projects\t\t Deletes ALL projects in the projects directory"
   @colour.help ''
 
   @colour.help '[options: forensic images]'
@@ -72,11 +79,15 @@ def command_help
 
 end
 
+#################################################
+
 def list_cases
   Dir["#{DIR_CASES}/**/*"].select{ |file| !File.directory? file }.each_with_index do |case_name, case_number|
     @colour.help "#{case_number}) #{case_name}"
   end
 end
+
+#################################################
 
 def list_modules module_type
   if module_type.empty?
@@ -94,6 +105,12 @@ def list_modules module_type
   end
 end
 
+#################################################
+
+def delete_all_projects
+  FileUtils.rm_rf(Dir.glob("#{DIR_PROJECTS}/*"))
+end
+
 # TODO: Add packer to enable making virtual machines from ISO files, especially in regards to image disk sizes and partitions
 #
 # TODO Simplify command line options code to make it look nicer, maybe change into a class or use a print class
@@ -105,6 +122,8 @@ end
 # case_details_file = "#{DIR_ROOT}/cases/case_details_default.xml"
 # case_schema_file = "#{DIR_ROOT}/lib/schema/case.xsd"
 
+
+@colour = Colour.new
 options = Hash.new
 
 opts = GetoptLong.new(
@@ -114,6 +133,9 @@ opts = GetoptLong.new(
     # Case options
     [ '--case-path', GetoptLong::REQUIRED_ARGUMENT ],
     [ '--list-cases', GetoptLong::NO_ARGUMENT ],
+
+    # Project options
+    [ '--delete-all-projects', GetoptLong::NO_ARGUMENT ],
 
     # Forensic image options
     [ '--forensic-image-output-dir', GetoptLong::NO_ARGUMENT ],
@@ -147,7 +169,7 @@ opts.each do |opt, arg|
     when '-h', '--help'
       command_help
       options[:help] = true
-      exit
+      exit 0
 
     # Case options
     when '--case-path'
@@ -157,7 +179,13 @@ opts.each do |opt, arg|
     when '--list-cases'
       @colour.help 'Listing cases:'
       list_cases
-      exit
+      exit 0
+
+    # Project options
+    when '--delete-all-projects'
+      @colour.help 'Deleting all projects'
+      delete_all_projects
+      exit 0
 
     # Forensic image options
     when '--forensic-image-output-dir'
@@ -179,7 +207,7 @@ opts.each do |opt, arg|
     # Module options
     when '--list-modules'
       list_modules arg
-      exit
+      exit 0
 
     # Module conditions
     when '--number-of-matching-conditions'
@@ -266,15 +294,21 @@ case ARGV[0]
   # TODO: If XML module input is given as a path look in path and ignore rest of module selection filters
   #
 
+
+
+
   when 'r','run'
     @colour.notify "Run command"
-
-    ### Create Vagrant Basebox via Packer
-    
 
     ### Declare options hash variables
     # Set vagrant box name to default if not set
     options[:vagrant_box_name] = 'Forgen_default_machine' # unless options.has_key? :vagrant_box_name
+
+    options[:virtualisation_provider] = 'VirtualBox'
+
+    # TODO: Delete this, check no other code reliance
+    # # Set Packer iso location to default [Windows server 2008] if not set (no base module selected)
+    # options[:packer_iso_location] = '/home/user/Downloads/7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso'
 
     options[:number_of_matching_conditions] = 3 unless options.has_key? :number_of_matching_conditions
 
@@ -285,6 +319,8 @@ case ARGV[0]
     # Validate case file
     case_xml, errors = validate_schema(options[:case_path], "#{DIR_SCHEMA}/case.xsd")
 
+    # (@colour.error errors; exit 0;) if errors.length > 0
+
     # Create nori parser xml to ruby hash template and give it to the XMLParser object
     nori_parser = Nori.new(:convert_tags_to => lambda { |tag| tag.snakecase.to_sym })
     xml_parse = XMLParse.new(nori_parser)
@@ -292,69 +328,53 @@ case ARGV[0]
     # Convert xml case file to ruby hash
     case_hash = xml_parse.xml_file_to_hash(options[:case_path])
 
-    # Create array of desired modules from ruby hash
-    desired_modules = Array.new
-    case_hash[:case].each_value do |system|
-      desired_modules << system[:modules][:module]
-    end
+    moduleSelector = ModuleSelector.new(@colour, options, xml_parse, case_hash)
 
-    # Get all forgen_metadata.xml paths
-    forgen_metadata_paths = Dir["#{DIR_MODULES}/**/**/**/*"].select{ |file| File.file?(file) && file.include?('forgen_metadata.xml') }
-
-    # Parse all forgen_metadata.xml files
-    module_hash = Array.new
-    forgen_metadata_paths.each do |file_path|
-      module_hash << xml_parse.xml_file_to_hash(file_path)
-    end
-
-    # Compare and validate forgen files and desired module selections
-    selected_modules = Hash.new
-    module_hash.each do |module_type|
-      module_type.each do |type, details|
-        @colour.notify "Validating module '#{details[:path]}' against schema '#{type}.xsd'"
-        validate_schema("#{DIR_MODULES}/#{details[:path]}/forgen_metadata.xml", "#{DIR_SCHEMA}/#{type}.xsd")
-
-        @colour.notify "Checking if module '#{details[:path]}' matches configuration in #{options[:case_path]}"
-        desired_modules.each do |desired_module_type|
-          desired_module_type.each do |desired_module_details|
-            if (desired_module_details.select{|k,v| details[k.to_sym] == v }.size >= options[:number_of_matching_conditions])
-              @colour.notify "Module #{details[:path]} matches at least #{options[:number_of_matching_conditions]} desired conditions"
-
-              selected_modules["#{details[:type]}_#{details[:category]}_#{details[:name]}"] = details
-            end
-          end
-        end
-
-      end
-    end
+    options[:base_module], config_modules = moduleSelector.select_modules
 
     ### Make config
     options[:project_dir] = "#{DIR_PROJECTS}/ForGen_Project_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}"
+    options[:basebox_url] = "#{options[:project_dir]}/#{options[:base_module][:name]}_#{options[:virtualisation_provider]}.box" unless options.has_key? :basebox_url
+    options[:basebox_name] = options[:basebox_url].split('/').last
     options[:vm_name] = options[:project_dir].split("/").last #unless options.has_key? [:vm_name] # <-- Could have multiple vms
 
     # Make project directory
     @colour.notify "Creating new project directory '#{options[:project_dir]}'"
     Dir.mkdir(options[:project_dir])
 
-    # Create modules hash
-    @colour.notify "Selecting puppet configuration modules for project #{options[:project_dir]}"
-    config_modules = Hash.new
-
-    selected_modules.each do |module_name, module_info|
-      config_modules["#{module_info[:provider]}".to_sym] = { module_name => module_info } if (PUPPET_MODULE_TYPES.include?(module_info[:type]))
-    end
-
     ## Generate Template files
     templateGenerator = TemplateGenerator.new(options, config_modules)
 
+    ### Packer
+    # Create Packerfile
+    @colour.notify 'Creating Packerfile'
+    templateGenerator.create_template_file("#{DIR_TEMPLATE}/Packerfile.erb","#{options[:project_dir]}/Packerfile")
+
+    @colour.notify 'Creating Autounattend.xml'
+    templateGenerator.create_template_file("#{DIR_TEMPLATE}/Autounattend.xml.erb","#{options[:project_dir]}/Autounattend.xml")
+
+    # TODO: Check if this is needed
+    # @colour.notify 'Creating Provisioner_install.ps1.erb'
+    # templateGenerator.create_template_file("#{DIR_TEMPLATE}/Provisioner_install.ps1.erb","#{options[:project_dir]}/Provisioner_install.ps1")
+
+    @colour.notify 'Copying puppet_install_script to project directory'
+    templateGenerator.cp_template("#{DIR_TEMPLATE}/puppet_install_scripts/windows.ps1","#{options[:project_dir]}/windows.ps1")
+
+    # Validate Packerfile
+    @colour.notify 'Validating generated Packerfile'
+    exit 0 unless system "cd #{options[:project_dir]} && packer validate Packerfile"
+
+    ## Vagrant
     # Generate Vagrantfile
     @colour.notify 'Creating Vagrantfile'
     templateGenerator.create_template_file("#{DIR_TEMPLATE}/Vagrantfile.erb","#{options[:project_dir]}/Vagrantfile")
 
+    ## Puppet
     # Generate Puppetfile
     @colour.notify 'Creating Puppetfile'
     templateGenerator.create_template_file("#{DIR_TEMPLATE}/Puppetfile.erb","#{options[:project_dir]}/Puppetfile")
 
+    ## XML
     outputGenerator = OutputGenerator.new(options, case_xml)
 
     # Generate XML output file
@@ -363,9 +383,15 @@ case ARGV[0]
 
     ## Create puppet module structure withing project directory using librarian-puppet
     @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir]}"
-    system "cd #{options[:project_dir]} && librarian-puppet install"
+    exit 0 unless system "cd #{options[:project_dir]} && librarian-puppet install"
 
-    ### Make Virtualbox image
+    ### Make Vagrant basebox (packer)
+    @colour.notify 'Creating Vagrant basebox'
+    @colour.notify 'Executing packer build (this may take a while)'
+    # TODO: Sort out verbose mode for Packer
+    exit 0 unless system "cd #{options[:project_dir]} && packer build #{'PACKER_LOG=1' if options[:verbose]} #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
+
+    ### Make Virtualbox image (vagrant)
     @colour.notify "Ensuring following commands run from directory '#{options[:project_dir]}/Vagrantfile'"
     @colour.notify 'Executing vagrant up (this may take a while)'
 
@@ -409,9 +435,9 @@ case ARGV[0]
     @colour.notify 'Run command finished'
 
   # options = make_config(options)
-    # options = make_virtualbox_image(options)
-    # options = make_forensics_image(options)
-    # options = make_test_sheets(options)
-    # options = make_mark_sheets(options)
+  # options = make_virtualbox_image(options)
+  # options = make_forensics_image(options)
+  # options = make_test_sheets(options)
+  # options = make_mark_sheets(options)
 
 end

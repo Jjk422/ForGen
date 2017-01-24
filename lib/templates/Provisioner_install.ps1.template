@@ -1,0 +1,3 @@
+(new-object System.Net.WebClient).DownloadFile('https://downloads.puppetlabs.com/windows/puppet-3.8.7-x64.msi','C:\tmp\puppet.msi')
+msiexec /passive /qn /norestart C:\tmp\puppet.msi
+exit 0

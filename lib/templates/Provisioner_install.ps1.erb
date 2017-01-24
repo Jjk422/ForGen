@@ -1,0 +1,11 @@
+echo 'Setting Execution to unrestricted';
+Set-ExecutionPolicy Unrestricted -Force;
+echo 'Downloading puppet .msi file';
+(new-object System.Net.WebClient).DownloadFile('https://downloads.puppetlabs.com/windows/puppet-<%= PUPPET_VERSION -%>-x64.msi','C:\puppet.msi');
+echo 'Installing puppet .msi file';
+msiexec /qn /norestart /i C:\puppet.msi;
+echo 'Ensuring puppet binaries added to path variable';
+$env:Path = "$env:Path;C:\Program Files\Puppet Labs\Puppet\bin";
+echo 'Comments';
+# echo 'Exiting';
+# exit(0);

@@ -47,9 +47,16 @@ DIR_SCHEMA = DIR_ROOT + '/lib/schema'
 ### Module constants
 
 ## Module types
-MODULE_TYPES = ['baseboxes','build','evidence','forensic','software']
+# All module types are listed in the array below
+MODULE_TYPES = ['base','build','evidence','forensic','software']
+
+# All packer iso module types are listed in the array below
+Packer_ISO_TYPES = ['base']
 
 ## Puppet constants
+# Puppet version
+PUPPET_VERSION = '3.8.7'
+
 # Puppet module types
 PUPPET_MODULE_TYPES = ['evidence', 'software', 'forensic','software']
 

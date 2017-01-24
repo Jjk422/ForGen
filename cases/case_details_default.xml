@@ -2,6 +2,24 @@
 
   <system>
     <information>
+
+      <!---->
+      <!-- TODO: New structure for disks and partitions-->
+      <!--<disk size="40GB" id="0" type="primary">-->
+        <!--<partition size="40" letter="C">-->
+
+        <!--</partition>-->
+      <!--</disk>-->
+      <!--<disk size="100GB" id="1" type="primary">-->
+        <!--<partition size="50GB" letter="D">-->
+
+        <!--</partition>-->
+        <!--<partition size="50GB" letter="E">-->
+
+        <!--</partition>-->
+      <!--</disk>-->
+
+
       <drive>
         <name>C</name>
         <size>124</size>
@@ -65,14 +83,14 @@
         <description>Installs the ruby language</description>
       </module>
 
-      <module>
-        <author>Jason Keighley</author>
-        <type>forensics</type>
-        <category>timestamp</category>
-        <name>change_timestamp</name>
-        <path>system/timestamp/change_timestamp</path>
-        <description></description>
-      </module>
+      <!--<module>-->
+        <!--<author>Jason Keighley</author>-->
+        <!--<type>forensics</type>-->
+        <!--<category>timestamp</category>-->
+        <!--<name>change_timestamp</name>-->
+        <!--<path>system/timestamp/change_timestamp</path>-->
+        <!--<description></description>-->
+      <!--</module>-->
 
       <module>
         <author>Jason Keighley</author>
@@ -86,7 +104,7 @@
 
       <module>
         <author>Jason Keighley</author>
-        <type>basebox</type>
+        <type>base</type>
         <category>windows</category>
         <name>windows_server_2008_r2</name>
         <distro>server</distro>

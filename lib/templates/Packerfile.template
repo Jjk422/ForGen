@@ -1,0 +1,33 @@
+{
+    "builders": [{
+    "type": "virtualbox-iso",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--natpf1", "winrm,tcp,,55985,,5985" ],
+      [ "modifyvm", "{{.Name}}", "--memory", "2048" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "2" ]
+    ],
+    "guest_os_type": "Windows2008_64",
+    "disk_size": 61440,
+    "iso_url": "http://download.microsoft.com/download/7/5/E/75EC4E54-5B02-42D6-8879-D8D3A25FBEF7/7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso",
+    "iso_checksum": "4263be2cf3c59177c45085c0a7bc6ca5",
+    "iso_checksum_type": "md5",
+    "communicator": "winrm",
+    "winrm_username": "vagrant",
+    "winrm_password": "vagrant",
+    "winrm_port": "55985",
+    "winrm_timeout": "5h",
+    "guest_additions_mode": "disable",
+    "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+    "shutdown_timeout": "15m",
+    "floppy_files": [
+      "Autounattend.xml"
+    ]
+  }],
+    "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": false,
+      "output": "windows2008r2min-{{.Provider}}.box"
+    }
+  ]
+}

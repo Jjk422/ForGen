@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+forge "https://forgeapi.puppetlabs.com"
+
+# Load Build modules
+mod 'puppetlabs-stdlib', '4.14.0'
+mod 'puppetlabs-windows', '3.0.0'
+
+# Load custom modules
+          mod 'ForGen-software_languages_ruby', :path => '/home/user/RubymineProjects/ForGen/modules/software/languages/ruby'
+
+# Load cleanup modules

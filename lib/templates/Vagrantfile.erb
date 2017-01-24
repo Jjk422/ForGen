@@ -6,16 +6,11 @@ Vagrant.configure("2") do |config|
   #   The value here should be the name of an installed box or a shorthand name of a
   #   box in HashiCorp's Atlas.
   # config.vm.box = 'Forgen_test_machine'
-  config.vm.box = '<%= @options[:vagrant_box_name] -%>'
+  config.vm.box = '<%= @options[:basebox_name] -%>'
   # config.vm.box_check_update = false
   # config.vm.box_download_insecure = false
   # config.vm.box_download_location_trusted = false
-
-  <% if @options.has_key? :basebox_url -%>
-config.vm.box_url = '<%= @options[:basebox_url] %>'
-  <% else -%>
-config.vm.box_url = 'file:///home/user/Documents/Baseboxes/Windows_2008_metasploitable/windows_2008_server_metasploitable.box'
-  <% end -%>
+  config.vm.box_url = '<%= @options[:basebox_url] %>'
   # config.vm.box_url = file://#{Path to local basebox file}
   ### config.vm.box_url = 'file:///home/user/Desktop/Baseboxes/Windows_2008_metasploitable/windows_2008_server_metasploitable.box'
   # config.vm.box_url = 'file:///media/sf_Baseboxes/Windows_10_32_bit/Build/package.box'
@@ -53,13 +48,7 @@ config.vm.box_url = 'file:///home/user/Documents/Baseboxes/Windows_2008_metasplo
 
   config.vm.provider "virtualbox" do |v|
     v.name = "<%= @options[:vm_name] %>"
-    <% if @options.has_key? :gui_output -%>
-    # GUI mode
-    v.gui = true
-    <% else -%>
-    # Headless mode
-    v.gui = false
-    <% end -%>
+    v.gui = <%= @options.has_key? :gui_output -%>
     <% if @options.has_key? :max_processor_cap -%>
     v.customize ["modifyvm", :id, "--cpuexecutioncap", "<%= @options[:max_processor_cap] %>"]
     <% end -%>
@@ -76,15 +65,23 @@ config.vm.box_url = 'file:///home/user/Documents/Baseboxes/Windows_2008_metasplo
     <% case provisioner
       when :Puppet -%>
 config.vm.provision "puppet" do |puppet|
+  # TODO: Make build modules dynamic and not hard coded
+  # Build modules
+  puppet.manifests_path = "<%= @options[:project_dir] %>/modules/stdlib/manifests"
+
+  #####
+
+  # Config modules
       <% modules.each do | module_name, module_information| -%>
   # puppet.manifest_file = Defaults to 'default.pp'
+  # puppet.manifest_file = "init.pp"
   puppet.manifest_file = "<%= module_information[:manifest_file] %>"
 
   # puppet.manifests_path = Defaults to 'manifests'
-  puppet.manifests_path = "<%= DIR_MODULES %>/<%= module_information[:path] %>/manifests"
+  puppet.manifests_path = "<%= @options[:project_dir] %>/modules/<%= module_name %>/manifests"
 
   # puppet.module_path = [Directory containing puppet modules]
-  puppet.module_path = "<%= DIR_MODULES %>/<%= module_information[:path] %>"
+  puppet.module_path = "<%= @options[:project_dir] %>/modules"
 
   # environment = [Name of the puppet environment]
   # environment_path = [Path to the directory containing environment files on the host disk]
@@ -107,7 +104,15 @@ config.vm.provision "puppet" do |puppet|
       <% end -%>
   #   puppet.options = "--verbose --debug"
     <% end -%>
-  <% end -%>
+
+  #####
+
+  # Cleanup modules
+
+
+
+  #####
 
   end
+  <% end -%>
 end

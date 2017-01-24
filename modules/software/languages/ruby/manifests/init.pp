@@ -1,12 +1,9 @@
-class init () {
-  # include ruby::install::install
+# include ruby::install::install
+include chocolatey
 
-  include chocolatey
+notice('Installing ruby')
 
-  notice('Puppet module to install ruby working')
-
-  package { 'ruby':
-    ensure   => installed,
-    provider => 'chocolatey',
-  }
+package { 'ruby':
+  ensure   => installed,
+  provider => 'chocolatey',
 }

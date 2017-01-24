@@ -1,8 +1,8 @@
-  include chocolatey
+include chocolatey
 
-  notice('Puppet module to install ruby working')
+notice('Installing notepad++')
 
-  package { 'notepadplusplus':
-    ensure   => installed,
-    provider => 'chocolatey',
-  }
+package { 'notepadplusplus':
+  ensure   => installed,
+  provider => 'chocolatey',
+}

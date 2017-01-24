@@ -5,6 +5,7 @@ The software will hopefully combat the lack of forensic training images in the c
 
 ## Installation
 ForGen should be fully machine independent, however a list of needed software for ForGen to function is included below:
+* Packer
 * Vagrant
 * Puppet
 * Ruby
@@ -29,7 +30,7 @@ Due to how ForGen is built, it includes multiple features, including, but not li
 * Ability to randomise and ensure continuously unique output of all of the above
 
 ## Usage
-ForGen is built to be as simple for the user as possinble while being complex enough to dynamically create unique and testable forensic images.
+ForGen is built to be as simple for the user as possible while being complex enough to dynamically create unique and testable forensic images.
 
 A few simple commands for ForGen can be found below:
 ``` ruby
@@ -66,7 +67,7 @@ run forgen.rb make-mark-sheet --forgen-project-path=[]Path to ForGen project]
 ```
 
 ## Contributions
-ForGen is currently in a closed development phase, however after the software is capable of demonstating the initial goals and wants of the software, it will be brought to open source, via the use of a public GitHub repository.
+ForGen is currently in a closed development phase, however after the software is capable of demonstrating the initial goals and wants of the software, it will be brought to open source, via the use of a public GitHub repository.
 
 Adding code to ForGen is just like contributing to any other GitHub repository, just follow the following steps:
 * Pull down the master ForGen repository at https://www.github.com/Jjk422/ForGen

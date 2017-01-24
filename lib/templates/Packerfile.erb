@@ -1,0 +1,60 @@
+{
+  "builders": [{
+  "type": "virtualbox-iso",
+  "headless": <%= !@options.has_key?(:gui_output) %>,
+  "vboxmanage": [
+<% if @options.has_key? :max_processor_cap -%>
+  [ "modifyvm", :id, "--cpuexecutioncap", "<%= @options[:max_processor_cap] %>" ],
+<% end -%>
+<% if @options.has_key? :max_memory_usage -%>
+  [ "modifyvm", "{{.Name}}", "--memory", "<%= @options[:max_memory_usage] -%>" ],
+<% end -%>
+<% if @options.has_key? :number_of_processors -%>
+  [ "modifyvm", "{{.Name}}", "--cpus", "<%= @options[:number_of_processors] -%>" ],
+<% end -%>
+  [ "modifyvm", "{{.Name}}", "--natpf1", "winrm,tcp,,55985,,5985" ]
+  ],
+  "guest_os_type": "Windows2008_64",
+  "disk_size": 61440,
+  "iso_url": "<%= @options[:base_module][:iso_url] -%>",
+  "iso_checksum": "<%= @options[:base_module][:iso_checksum] -%>",
+  "iso_checksum_type": "<%= @options[:base_module][:iso_checksum_type] -%>",
+  "communicator": "winrm",
+  "winrm_username": "vagrant",
+  "winrm_password": "vagrant",
+  "winrm_port": "55985",
+  "winrm_timeout": "5h",
+  "guest_additions_mode": "attach",
+  "guest_additions_path": "Z:",
+  "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+  "shutdown_timeout": "1h",
+  "floppy_files": [
+  "Autounattend.xml",
+  "windows.ps1"
+  ]
+  }],
+  "provisioners": [
+    {
+    "type": "windows-shell",
+    "inline": [
+    "echo 'Installing VirtualBox drivers'",
+    "cmd.exe /c E:\\VBoxWindowsAdditions.exe /S /extract /D=C:\\Drivers",
+    "echo 'Installing VirtualBox guest additions",
+    "cmd.exe /c C:\\Drivers\\VBoxGuestAdditions.exe /S",
+    "echo 'VirtualBox guest additions installed'"
+    ]
+    },
+    {
+    "type": "powershell",
+    "environment_vars": "PuppetVersion=<%= PUPPET_VERSION -%>",
+    "script": "<%= 'windows.ps1' -%>"
+    }
+  ],
+  "post-processors": [
+    {
+    "type": "vagrant",
+    "keep_input_artifact": false,
+    "output": "<%= @options[:basebox_name] %>"
+    }
+  ]
+}

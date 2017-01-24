@@ -18,4 +18,8 @@ class TemplateGenerator
       file.write(erb_result)
     end
   end
+
+  def cp_template(template_file_path, output_file_path)
+    FileUtils.cp template_file_path, output_file_path
+  end
 end
