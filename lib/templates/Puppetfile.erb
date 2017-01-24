@@ -11,9 +11,11 @@ mod 'puppetlabs-windows', '3.0.0'
 <% @config_modules.each do | provisioner, modules | -%>
     <% case provisioner
        when :Puppet -%>
-      <% modules.each do | module_name, module_information| -%>
+        <% modules.each do | module_root | -%>
+            <% module_root.each do | module_name, module_information| -%>
 mod 'ForGen-<%= module_name %>', :path => '<%= DIR_MODULES %>/<%= module_information[:path] %>'
-      <% end -%>
+            <% end -%>
+        <% end -%>
     <% end -%>
 <% end -%>
 

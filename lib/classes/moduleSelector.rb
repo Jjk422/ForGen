@@ -86,7 +86,8 @@ class ModuleSelector
             if (desired_module_details.select{|k,v| details[k.to_sym] == v }.size >= @options[:number_of_matching_conditions])
               @colour.notify "Module #{details[:path]} matches at least #{@options[:number_of_matching_conditions]} desired conditions"
 
-              selected_modules["#{details[:type]}_#{details[:category]}_#{details[:name]}"] = details
+              # selected_modules["#{details[:type]}_#{details[:category]}_#{details[:name]}"] = details
+              selected_modules["#{details[:path].gsub(/(\\|\/)/,'_').to_sym}"] = details
             end
           end
         end
@@ -100,7 +101,11 @@ class ModuleSelector
     base_module = nil
 
     selected_modules.each do |module_name, module_info|
-      config_modules["#{module_info[:provider]}".to_sym] = { module_name => module_info } if (PUPPET_MODULE_TYPES.include?(module_info[:type]))
+      if (PUPPET_MODULE_TYPES.include?(module_info[:type]))
+        config_modules["#{module_info[:provider]}".to_sym] = [] unless config_modules.has_key? ("#{module_info[:provider]}".to_sym)
+        config_modules["#{module_info[:provider]}".to_sym] << { module_name.to_sym => module_info }
+      end
+
       base_module = module_info if (Packer_ISO_TYPES.include?(module_info[:type]))
     end
 

@@ -1,12 +1,12 @@
-<software>
+<evidence>
   <!-- Module information-->
   <author>Jason Keighley</author>
-  <type>software</type>
-  <category>text_editor</category>
-  <name>notepad++</name>
+  <type>evidence</type>
+  <category>fraud</category>
+  <name>business_invoice_1</name>
   <version></version>
-  <path>software/text_editor/notepad++</path>
+  <path>evidence/fraud/business_invoice_1</path>
   <description>Installs notepad++</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
-</software>
+</evidence>

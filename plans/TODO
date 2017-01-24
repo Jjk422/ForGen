@@ -2,22 +2,27 @@ TODO:
 Facter inplementation (Datastore)
     (Added to before puppet implementation)
     (Added to after puppet implementation)
+
 More puppet modules
     (Need a large amount of diverse puppet modules: forensic, evidence and software)
+
 Test and mark sheets
     (Static and dynamic questions with answers)
     (Write a way to check and give back marks for each project)
     (Answers unique to each individual to ensure plagiarism is not possible)
     (Ability for custom questions to be added)
+
 Timeline implementation for system and file timestamps
     (Way to insert wanted time)
     (Way to allow for wanted time to be inserted)
     (Timeline that categorises and ensures timestamps are correct e.g. not before image install)
     (System timestamp clober: if beginning and end time stated, allow for ALL files to be changed in accordance with the image start and end dates)
+
 Optimisation of code
     (Redo module search/selection functionality)
     (Allow for repeated generation of vagrant vms and forensic images from one packer basebox)
     (Allow for packer generated basebox to provision software via puppet that is identical in all subsequent vagrant vms and forensic images: Can be changed via timestamping module)
- Forensic image/VM write to disk
+
+Forensic image/VM write to disk
      (Write generated forensic image to disk, most likely via DD copy to ensure completely identical)
      (Ensure disk is bootable and near identical to a real system)

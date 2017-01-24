@@ -20,11 +20,13 @@ require "#{DIR_CLASSES}/XMLParse"
 require "#{DIR_METHOD_LIBRARIES}/schema.rb"
 
 #################################################
+#################################################
 
 def disable_colour
   @colour.disable_colours
 end
 
+#################################################
 #################################################
 
 # Display help message for command line inputs.
@@ -80,6 +82,7 @@ def command_help
 end
 
 #################################################
+#################################################
 
 def list_cases
   Dir["#{DIR_CASES}/**/*"].select{ |file| !File.directory? file }.each_with_index do |case_name, case_number|
@@ -87,6 +90,7 @@ def list_cases
   end
 end
 
+#################################################
 #################################################
 
 def list_modules module_type
@@ -106,6 +110,7 @@ def list_modules module_type
 end
 
 #################################################
+#################################################
 
 def delete_all_projects
   FileUtils.rm_rf(Dir.glob("#{DIR_PROJECTS}/*"))
@@ -122,9 +127,179 @@ end
 # case_details_file = "#{DIR_ROOT}/cases/case_details_default.xml"
 # case_schema_file = "#{DIR_ROOT}/lib/schema/case.xsd"
 
+#################################################
+#################################################
 
+def make_configuration(options)
+  options[:number_of_matching_conditions] = 3 unless options.has_key? :number_of_matching_conditions
+
+  ### Parse xml
+  options[:case_path] = "#{DIR_CASES}/case_details_default.xml" unless options.has_key? :case_path
+
+  @colour.notify "Validating case file '#{options[:case_path]}'"
+  # Validate case file
+  case_xml, errors = validate_schema(options[:case_path], "#{DIR_SCHEMA}/case.xsd")
+
+  # (@colour.error errors; exit 0;) if errors.length > 0
+
+  # Create nori parser xml to ruby hash template and give it to the XMLParser object
+  nori_parser = Nori.new(:convert_tags_to => lambda { |tag| tag.snakecase.to_sym })
+  xml_parse = XMLParse.new(nori_parser)
+
+  # Convert xml case file to ruby hash
+  case_hash = xml_parse.xml_file_to_hash(options[:case_path])
+
+  ### Select Configuration modules
+  # TODO: Make module selector create array hash structure for single modules in xml file ({:provisioner}=>[{"Module_name"}=>{Mod_info_1=>Mod_val_1, Mod_info_2=>Mod_val_2, Mod_info_3=>Mod_val_3}])
+  moduleSelector = ModuleSelector.new(@colour, options, xml_parse, case_hash)
+  options[:base_module], config_modules = moduleSelector.select_modules
+
+  # @colour.error 'config_modules'
+  # @colour.error config_modules
+  # @colour.error ''
+
+  options[:project_dir] = "#{DIR_PROJECTS}/ForGen_Project_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}"
+  options[:basebox_url] = "#{options[:project_dir]}/#{options[:base_module][:name]}_#{options[:virtualisation_provider]}.box" unless options.has_key? :basebox_url
+  options[:basebox_name] = options[:basebox_url].split('/').last
+  options[:vm_name] = options[:project_dir].split("/").last #unless options.has_key? [:vm_name] # <-- Could have multiple vms
+
+  # Make project directory
+  @colour.notify "Creating new project directory '#{options[:project_dir]}'"
+  Dir.mkdir(options[:project_dir])
+
+  ## Generate Template files
+  templateGenerator = TemplateGenerator.new(options, config_modules)
+
+  ### Packer
+  # Create Packerfile
+  @colour.notify 'Creating Packerfile'
+  templateGenerator.create_template_file("#{DIR_TEMPLATE}/Packerfile.erb","#{options[:project_dir]}/Packerfile")
+
+  @colour.notify 'Creating Autounattend.xml'
+  templateGenerator.create_template_file("#{DIR_TEMPLATE}/Autounattend.xml.erb","#{options[:project_dir]}/Autounattend.xml")
+
+  # TODO: Check if this is needed
+  # @colour.notify 'Creating Provisioner_install.ps1.erb'
+  # templateGenerator.create_template_file("#{DIR_TEMPLATE}/Provisioner_install.ps1.erb","#{options[:project_dir]}/Provisioner_install.ps1")
+
+  @colour.notify 'Copying puppet_install_script to project directory'
+  templateGenerator.cp_template("#{DIR_TEMPLATE}/puppet_install_scripts/windows.ps1","#{options[:project_dir]}/windows.ps1")
+
+  # Validate Packerfile
+  @colour.notify 'Validating generated Packerfile'
+  exit 0 unless system "cd #{options[:project_dir]} && packer validate Packerfile"
+
+  ## Vagrant
+  # Generate Vagrantfile
+  @colour.notify 'Creating Vagrantfile'
+  templateGenerator.create_template_file("#{DIR_TEMPLATE}/Vagrantfile.erb","#{options[:project_dir]}/Vagrantfile")
+
+  ## Puppet
+  # Generate Puppetfile
+  @colour.notify 'Creating Puppetfile'
+  templateGenerator.create_template_file("#{DIR_TEMPLATE}/Puppetfile.erb","#{options[:project_dir]}/Puppetfile")
+
+  ## XML
+  outputGenerator = OutputGenerator.new(options, case_xml)
+
+  # Generate XML output file
+  @colour.notify 'Generating XML output file'
+  outputGenerator.create_xml_output_file("#{options[:project_dir]}/CaseDetails.xml")
+
+  ## Create puppet module structure withing project directory using librarian-puppet
+  @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir]}"
+  exit 0 unless system "cd #{options[:project_dir]} && librarian-puppet install"
+
+  return options
+end
+
+#################################################
+#################################################
+
+def make_vagrant_basebox(options)
+  @colour.notify 'Creating Vagrant basebox'
+  @colour.notify 'Executing packer build (this may take a while)'
+# TODO: Sort out verbose mode for Packer
+  exit 0 unless system "cd #{options[:project_dir]} && packer build #{'PACKER_LOG=1' if options[:verbose]} #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
+
+  return options
+end
+
+#################################################
+#################################################
+
+def make_virtualbox_vm(options)
+  @colour.notify "Ensuring following commands run from directory '#{options[:project_dir]}/Vagrantfile'"
+  @colour.notify 'Executing vagrant up (this may take a while)'
+
+  if options.has_key? :debug
+    system "cd #{options[:project_dir]} && vagrant up --debug"
+  else
+    system "cd #{options[:project_dir]} && vagrant up"
+  end
+
+  return options
+end
+
+#################################################
+#################################################
+
+def create_ewf_image(drive_path ,image_output_location)
+  ## Make E01 image
+  @colour.notify "Creating E01 image with path #{image_output_location}.E01"
+  @colour.notify 'This may take a while:'
+  @colour.notify "E01 image #{image_output_location}.E01 created" if system "ftkimager '#{drive_path}' '#{image_output_location}' --e01"
+end
+
+def create_dd_image(drive_path, image_output_location)
+  ## Make DD image
+  @colour.notify "Creating dd image with path #{image_output_location}.raw"
+  @colour.notify 'This may take a while:'
+  @colour.notify "Raw image #{image_output_location}.raw created" if system "aBoxManage clonemedium disk '#{drive_path}' '#{image_output_location}.raw' --format RAW"
+end
+
+def delete_virtualbox_vm(vm_name)
+  @colour.notify "Deleting VirtualBox VM #{vm_name}"
+  @colour.notify "VirtualBox VM #{vm_name} deleted" if system "VBoxManage unregistervm #{vm_name} --delete"
+end
+
+def make_forensics_image(options)
+  drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*/, '').sub(/\n/, '')
+  # drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*|\n\Z/, '')
+  drive_name = drive_path.split('/').last
+
+  options[:image_output_location] = "#{options[:project_dir]}/#{drive_name}".sub(/.vmdk|.vdi/, '') unless options.has_key? :image_output_location
+
+  unless options.has_key? :no_vm_shutdown
+    ## Ensure all vms are shutdown
+    system "cd #{options[:project_dir]} && vagrant halt"
+
+    if options.has_key? :create_raw_image
+     create_dd_image(drive_path, options[:image_output_location])
+    end
+
+    if options.has_key? :create_ewf_image
+      create_ewf_image(drive_path, options[:image_output_location])
+    end
+
+    if options.has_key? :delete_vm_after_image_creation
+      delete_virtualbox_vm(options[:vm_name])
+    end
+  else
+    @colour.error 'Cannot create forensic image as --no-vm-shutdown option is set to true'
+  end
+
+  return options
+end
+
+#################################################
+#################################################
+
+### Declare default variables
 @colour = Colour.new
 options = Hash.new
+options[:vagrant_box_name] = 'Forgen_default_machine'
+options[:virtualisation_provider] = 'VirtualBox'
 
 opts = GetoptLong.new(
     # Help options
@@ -296,143 +471,45 @@ case ARGV[0]
 
 
 
-
   when 'r','run'
-    @colour.notify "Run command"
-
-    ### Declare options hash variables
-    # Set vagrant box name to default if not set
-    options[:vagrant_box_name] = 'Forgen_default_machine' # unless options.has_key? :vagrant_box_name
-
-    options[:virtualisation_provider] = 'VirtualBox'
+    @colour.notify 'Running all ForGen features'
 
     # TODO: Delete this, check no other code reliance
     # # Set Packer iso location to default [Windows server 2008] if not set (no base module selected)
     # options[:packer_iso_location] = '/home/user/Downloads/7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso'
 
-    options[:number_of_matching_conditions] = 3 unless options.has_key? :number_of_matching_conditions
+    ### Make configuration
+    options = make_configuration(options)
 
-    ### Parse xml
-    options[:case_path] = "#{DIR_CASES}/case_details_default.xml" unless options.has_key? :case_path
-
-    @colour.notify "Validating case file '#{options[:case_path]}'"
-    # Validate case file
-    case_xml, errors = validate_schema(options[:case_path], "#{DIR_SCHEMA}/case.xsd")
-
-    # (@colour.error errors; exit 0;) if errors.length > 0
-
-    # Create nori parser xml to ruby hash template and give it to the XMLParser object
-    nori_parser = Nori.new(:convert_tags_to => lambda { |tag| tag.snakecase.to_sym })
-    xml_parse = XMLParse.new(nori_parser)
-
-    # Convert xml case file to ruby hash
-    case_hash = xml_parse.xml_file_to_hash(options[:case_path])
-
-    moduleSelector = ModuleSelector.new(@colour, options, xml_parse, case_hash)
-
-    options[:base_module], config_modules = moduleSelector.select_modules
-
-    ### Make config
-    options[:project_dir] = "#{DIR_PROJECTS}/ForGen_Project_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}"
-    options[:basebox_url] = "#{options[:project_dir]}/#{options[:base_module][:name]}_#{options[:virtualisation_provider]}.box" unless options.has_key? :basebox_url
-    options[:basebox_name] = options[:basebox_url].split('/').last
-    options[:vm_name] = options[:project_dir].split("/").last #unless options.has_key? [:vm_name] # <-- Could have multiple vms
-
-    # Make project directory
-    @colour.notify "Creating new project directory '#{options[:project_dir]}'"
-    Dir.mkdir(options[:project_dir])
-
-    ## Generate Template files
-    templateGenerator = TemplateGenerator.new(options, config_modules)
-
-    ### Packer
-    # Create Packerfile
-    @colour.notify 'Creating Packerfile'
-    templateGenerator.create_template_file("#{DIR_TEMPLATE}/Packerfile.erb","#{options[:project_dir]}/Packerfile")
-
-    @colour.notify 'Creating Autounattend.xml'
-    templateGenerator.create_template_file("#{DIR_TEMPLATE}/Autounattend.xml.erb","#{options[:project_dir]}/Autounattend.xml")
-
-    # TODO: Check if this is needed
-    # @colour.notify 'Creating Provisioner_install.ps1.erb'
-    # templateGenerator.create_template_file("#{DIR_TEMPLATE}/Provisioner_install.ps1.erb","#{options[:project_dir]}/Provisioner_install.ps1")
-
-    @colour.notify 'Copying puppet_install_script to project directory'
-    templateGenerator.cp_template("#{DIR_TEMPLATE}/puppet_install_scripts/windows.ps1","#{options[:project_dir]}/windows.ps1")
-
-    # Validate Packerfile
-    @colour.notify 'Validating generated Packerfile'
-    exit 0 unless system "cd #{options[:project_dir]} && packer validate Packerfile"
-
-    ## Vagrant
-    # Generate Vagrantfile
-    @colour.notify 'Creating Vagrantfile'
-    templateGenerator.create_template_file("#{DIR_TEMPLATE}/Vagrantfile.erb","#{options[:project_dir]}/Vagrantfile")
-
-    ## Puppet
-    # Generate Puppetfile
-    @colour.notify 'Creating Puppetfile'
-    templateGenerator.create_template_file("#{DIR_TEMPLATE}/Puppetfile.erb","#{options[:project_dir]}/Puppetfile")
-
-    ## XML
-    outputGenerator = OutputGenerator.new(options, case_xml)
-
-    # Generate XML output file
-    @colour.notify 'Generating XML output file'
-    outputGenerator.create_xml_output_file("#{options[:project_dir]}/CaseDetails.xml")
-
-    ## Create puppet module structure withing project directory using librarian-puppet
-    @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir]}"
-    exit 0 unless system "cd #{options[:project_dir]} && librarian-puppet install"
+    @colour.error 'vagrant options'
+    @colour.error options
+    @colour.error ''
 
     ### Make Vagrant basebox (packer)
-    @colour.notify 'Creating Vagrant basebox'
-    @colour.notify 'Executing packer build (this may take a while)'
-    # TODO: Sort out verbose mode for Packer
-    exit 0 unless system "cd #{options[:project_dir]} && packer build #{'PACKER_LOG=1' if options[:verbose]} #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
+    options = make_vagrant_basebox(options)
+
+    @colour.error 'virtualbox options'
+    @colour.error options
+    @colour.error ''
 
     ### Make Virtualbox image (vagrant)
-    @colour.notify "Ensuring following commands run from directory '#{options[:project_dir]}/Vagrantfile'"
-    @colour.notify 'Executing vagrant up (this may take a while)'
+    options = make_virtualbox_vm(options)
 
-    if options.has_key? :debug
-      system "cd #{options[:project_dir]} && vagrant up --debug"
-    else
-      system "cd #{options[:project_dir]} && vagrant up"
-    end
+    @colour.error 'forensics options'
+    @colour.error options
+    @colour.error ''
 
     ### Make forensic image
-    drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*/, '').sub(/\n/, '')
-    # drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*|\n\Z/, '')
-    drive_name = drive_path.split('/').last
-
-    options[:image_output_location] = "#{options[:project_dir]}/#{drive_name}".sub(/.vmdk|.vdi/, '') unless options.has_key? :image_output_location
-
-    unless options.has_key? :no_vm_shutdown
-      ## Ensure all vms are shutdown
-      system "cd #{options[:project_dir]} && vagrant halt"
-
-      if options.has_key? :create_raw_image
-        ## Make DD image
-        @colour.notify "Creating dd image with path #{options[:image_output_location]}.raw"
-        @colour.notify 'This may take a while:'
-        @colour.notify "Raw image #{options[:image_output_location]}.raw created" if system "VBoxManage clonemedium disk '#{drive_path}' '#{options[:image_output_location]}.raw' --format RAW"
-      end
-
-      if options.has_key? :create_ewf_image
-        ## Make E01 image
-        @colour.notify "Creating E01 image with path #{options[:image_output_location]}.E01"
-        @colour.notify 'This may take a while:'
-        @colour.notify "E01 image #{options[:image_output_location]}.E01 created" if system "ftkimager '#{drive_path}' '#{options[:image_output_location]}' --e01"
-      end
-
-      if options.has_key? :delete_vm_after_image_creation
-        @colour.notify "Deleting VirtualBox VM #{options[:vm_name]}"
-        @colour.notify "VirtualBox VM #{options[:vm_name]} deleted" if system "VBoxManage unregistervm #{options[:vm_name]} --delete"
-      end
-    end
+    options = make_forensics_image(options)
 
     @colour.notify 'Run command finished'
+
+  # when 'make-config'
+  #   @colour.notify 'Making configuration files'
+  #   make_configuration(options)
+  #
+  # when 'make_virtualbox_vm'
+  #
 
   # options = make_config(options)
   # options = make_virtualbox_image(options)

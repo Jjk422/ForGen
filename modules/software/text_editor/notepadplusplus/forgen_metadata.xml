@@ -1,0 +1,12 @@
+<software>
+  <!-- Module information-->
+  <author>Jason Keighley</author>
+  <type>software</type>
+  <category>text_editor</category>
+  <name>notepad++</name>
+  <version></version>
+  <path>software/text_editor/notepadplusplus</path>
+  <description>Installs notepad++</description>
+  <provider>Puppet</provider>
+  <manifest_file>init.pp</manifest_file>
+</software>

@@ -94,6 +94,15 @@
 
       <module>
         <author>Jason Keighley</author>
+        <type>evidence</type>
+        <category>fraud</category>
+        <name>business_invoice_1</name>
+        <path>evidence/fraud/business_invoice_1</path>
+        <description></description>
+      </module>
+
+      <module>
+        <author>Jason Keighley</author>
         <type>software</type>
         <category>text_editor</category>
         <name>notepad++</name>
