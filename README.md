@@ -5,17 +5,18 @@ The software will hopefully combat the lack of forensic training images in the c
 
 ## Installation
 ForGen should be fully machine independent, however a list of needed software for ForGen to function is included below:
-* Packer
-* Vagrant
-* Puppet
-* Ruby
-* Virtualbox
+* [Packer](https://www.packer.io/)
+* [Vagrant](https://www.vagrantup.com/)
+* [Puppet](https://puppet.com/)
+* [Ruby](https://www.ruby-lang.org/en/)
+* [Virtualbox](https://www.virtualbox.org/)
+* [ftkimager](http://accessdata.com/product-download)
 
 ### Ubuntu
 TODO: apt-get command that installs all software with correct versions
 
 ### Windows
-TODO: list web pages with download links
+TODO: list web pages with download links (maybe with chocolatey used)
 
 ### MacOS
 TODO: find out how MacOS installs software
@@ -33,37 +34,41 @@ Due to how ForGen is built, it includes multiple features, including, but not li
 ForGen is built to be as simple for the user as possible while being complex enough to dynamically create unique and testable forensic images.
 
 A few simple commands for ForGen can be found below:
-``` ruby
+```
 # Display ForGen help page
 ruby forgen.rb --help
-
+  
 # Display ForGen version number
 ruby forgen.rb --version
-
+  
 # Run forgen.rb, creating a forensic image, its corresponding virtual machine, a corresponding testing sheet and a corresponding mark scheme, based off of the default randomising scenario
 ruby forgen.rb run
-
+  
 # Run forgen.rb creating all components (see run forgen.rb run command for more details), however a custom scenario file is selected.
 Scenario_file_path represents the path of the custom scenario.
-ruby forgen.rb run --scenario [scenario_file_path]
-
+ruby forgen.rb run --case-path [case_file_path]
+  
 # Tell ForGen to only create the ForGen configuration needed to create the VMs and forensic images without creating the VMs and forensic images themselves.
 ruby forgen.rb make-config
-
-# Tell ForGen to only create the ForGen virtual machine and the config that it is based off of.
-ruby forgen.rb make-virtual-machine --forgen-project-path=[Path to ForGen project]
-
+  
+# Tell ForGen to only create the ForGen vagrant basebox and the config that it is based off of.
+ruby forgen.rb make-vagrant-basebox --project-dir [project_dir_path]
+  
+# Tell ForGen to only create the ForGen virtual machine, vagrant basebox and the config that it is based off of.
+ruby forgen.rb make-virtual-machine --project-dir [project_dir_path]
+  
 # Tell ForGen to create the following:
 * The ForGen configuration files
+* The vagrant basebox
 * The virtual machine based off of the ForGen configuration
 * The forensic image based on the virtual machine drives
-run forgen.rb make-forensic-image --forgen-project-path=[Path to ForGen project]
-
+run forgen.rb make-forensic-image --project-dir [project_dir_path]
+  
 # Tell ForGen to create a test sheet containing questions based on the ForGen configuration
-run forgen.rb make-test-sheet --forgen-project-path=[Path to ForGen project]
-
+run forgen.rb make-test-sheet --project-dir [project_dir_path]
+  
 # Tell ForGen to create a mark sheet based on the given test sheet and ForGen configuration 
-run forgen.rb make-mark-sheet --forgen-project-path=[]Path to ForGen project]
+run forgen.rb make-mark-sheet --project-dir [project_dir_path]
 ```
 
 ## Contributions

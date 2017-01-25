@@ -38,7 +38,15 @@ def command_help
 
   @colour.help '[command: main]'
   @colour.help " r, run\t\t\t\t Run all aspects of ForGen"
+  @colour.help "make-config\t\t\t Make configuration files for a new project"
+  @colour.help "make-vagrant-basebox\t\t Make a vagrant basebox"
+  @colour.help "make-virtual-machine\t\t Make a virtual machine"
+  @colour.help "make-forensic-image\t\t Make a forensic image"
+  @colour.help ''
+
+  @colour.help '[command: information]'
   @colour.help "-h, --help\t\t\t Display this help screen"
+  @colour.help "--version\t\t\t Displays the current ForGen version"
   @colour.help "--list-cases\t\t\t List all case files currently in ForGen"
   @colour.help "--list-modules <type>\t\t List <type> modules that are in ForGen"
   @colour.help ''
@@ -79,6 +87,13 @@ def command_help
   @colour.help "--debug\t\t\t\t Run all ForGen elements in debug mode"
   @colour.help ''
 
+end
+
+#################################################
+#################################################
+
+def display_version
+  @colour.help VERSION_NUMBER
 end
 
 #################################################
@@ -304,6 +319,7 @@ options[:virtualisation_provider] = 'VirtualBox'
 opts = GetoptLong.new(
     # Help options
     [ '-h', '--help', GetoptLong::NO_ARGUMENT ],
+    [ '--version', GetoptLong::NO_ARGUMENT ],
 
     # Case options
     [ '--case-path', GetoptLong::REQUIRED_ARGUMENT ],
@@ -311,6 +327,7 @@ opts = GetoptLong.new(
 
     # Project options
     [ '--delete-all-projects', GetoptLong::NO_ARGUMENT ],
+    [ '--project-dir', GetoptLong::REQUIRED_ARGUMENT ],
 
     # Forensic image options
     [ '--forensic-image-output-dir', GetoptLong::NO_ARGUMENT ],
@@ -343,7 +360,10 @@ opts.each do |opt, arg|
     # Help options
     when '-h', '--help'
       command_help
-      options[:help] = true
+      exit 0
+
+    when '--version'
+      display_version
       exit 0
 
     # Case options
@@ -361,6 +381,10 @@ opts.each do |opt, arg|
       @colour.help 'Deleting all projects'
       delete_all_projects
       exit 0
+
+    when '--project-dir'
+      @colour.help "--project-directory set to #{arg}"
+      options[:project_dir] = arg
 
     # Forensic image options
     when '--forensic-image-output-dir'
@@ -425,7 +449,7 @@ opts.each do |opt, arg|
 
     # Colour options
     when '--disable-colours'
-      @colour.help '--disable-colouts set to true'
+      # @colour.help '--disable-colouts set to true'
       @colour.disable_colours
 
     else
@@ -479,25 +503,44 @@ case ARGV[0]
     # options[:packer_iso_location] = '/home/user/Downloads/7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso'
 
     ### Make configuration
-    options = make_configuration(options)
+    make_configuration(options)
 
     ### Make Vagrant basebox (packer)
-    options = make_vagrant_basebox(options)
+    make_vagrant_basebox(options)
 
     ### Make Virtualbox image (vagrant)
-    options = make_virtualbox_vm(options)
+    make_virtualbox_vm(options)
 
     ### Make forensic image
-    options = make_forensics_image(options)
+    make_forensics_image(options)
 
     @colour.notify 'Run command finished'
 
-  # when 'make-config'
-  #   @colour.notify 'Making configuration files'
-  #   make_configuration(options)
-  #
-  # when 'make_virtualbox_vm'
-  #
+  when 'make-config'
+    @colour.notify 'Making configuration files'
+    make_configuration(options)
+
+  when 'make-vagrant-basebox'
+    (@colour.error 'The option [--project-dir] needs to be set for the command [make-vagrant-basebox]'; exit 0;) unless options.has_key? :project_dir
+    @colour.notify 'Making vagrant basebox'
+    make_vagrant_basebox(options)
+
+  when 'make-virtual-machine'
+    (@colour.error 'The option [--project-dir] needs to be set for the command [make-virtual-machine]'; exit 0;) unless options.has_key? :project_dir
+    @colour.notify 'Making virtual machine'
+    make_vagrant_basebox(options)
+    make_virtualbox_vm(options)
+
+  when 'make-forensic-image'
+    (@colour.error 'The option [--project-dir] needs to be set for the command [make-forensic-image]'; exit 0;) unless options.has_key? :project_dir
+    (@colour.error 'The options [--create_ewf_image] or [--create_dd_image] need to be set for the command [make-forensic-image]'; exit 0;) unless options.has_key? (:create_ewf_image || :create_dd_image)
+    @colour.notify 'Making forensic image'
+    make_vagrant_basebox(options)
+    make_virtualbox_vm(options)
+    make_forensics_image(options)
+
+  else
+    @colour.error "[#{ARGV[0]}] is not a valid ForGen command"
 
   # options = make_config(options)
   # options = make_virtualbox_image(options)
