@@ -2,6 +2,7 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>software</type>
+  <!--<os></os>-->
   <category>text_editor</category>
   <name>notepad++</name>
   <version></version>

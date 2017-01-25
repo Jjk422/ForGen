@@ -481,23 +481,11 @@ case ARGV[0]
     ### Make configuration
     options = make_configuration(options)
 
-    @colour.error 'vagrant options'
-    @colour.error options
-    @colour.error ''
-
     ### Make Vagrant basebox (packer)
     options = make_vagrant_basebox(options)
 
-    @colour.error 'virtualbox options'
-    @colour.error options
-    @colour.error ''
-
     ### Make Virtualbox image (vagrant)
     options = make_virtualbox_vm(options)
-
-    @colour.error 'forensics options'
-    @colour.error options
-    @colour.error ''
 
     ### Make forensic image
     options = make_forensics_image(options)

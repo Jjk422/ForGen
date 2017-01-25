@@ -14,7 +14,7 @@ task :yard do
     ]
     # Extra options for the yard documentation
     t.options = [
-        "--title=SecGen #{VERSION_NUMBER} Documentation",
+        "--title=ForGen #{VERSION_NUMBER} Documentation",
         "--readme=#{DIR_ROOT}/README.md",
         "--output-dir=#{DIR_DOCUMENTATION_OUTPUT_PATH}" "#{DIR_DOCUMENTATION_OUTPUT_NAME}" ,
         "--no-save"
@@ -30,5 +30,5 @@ task :yard_clean do
   # NEED TO FIND A BETTER WAY TO CLEAN FILES AS VULNERABILITIES IN 'rm_rf'
 
   # Remove the documentation directory and all files in it
-  rm_rf(DIR_DOCUMENTATION_OUTPUT_PATH + DIR_DOCUMENTATION_OUTPUT_NAME)
+  FileUtils.rm_rf(DIR_DOCUMENTATION_OUTPUT_PATH + DIR_DOCUMENTATION_OUTPUT_NAME)
 end

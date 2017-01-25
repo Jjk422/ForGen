@@ -1,4 +1,6 @@
 TODO:
+Add OS directory (windows, unix, linux, bsd) to modules directory
+
 Facter inplementation (Datastore)
     (Added to before puppet implementation)
     (Added to after puppet implementation)
