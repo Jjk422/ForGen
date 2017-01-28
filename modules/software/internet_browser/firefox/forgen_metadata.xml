@@ -2,12 +2,11 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>software</type>
-  <!--<os></os>-->
-  <category>text_editor</category>
-  <name>notepad++</name>
+  <category>internet_browser</category>
+  <name>firefox</name>
   <version>0.0.1</version>
-  <path>software/text_editor/notepadplusplus</path>
-  <description>Installs notepad++</description>
+  <path>software/internet_browser/firefox</path>
+  <description>Installs the web browser Firefox</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
 </software>

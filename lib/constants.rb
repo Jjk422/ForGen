@@ -1,4 +1,7 @@
-### Projects CONSTANTS file
+# Projects CONSTANTS file
+# Contains all constants for ForGen
+
+### Directory constants
 
 ## Directory Locations
 
@@ -47,6 +50,7 @@ DIR_SCHEMA = DIR_ROOT + '/lib/schema'
 ### Module constants
 
 ## Module types
+
 # All module types are listed in the array below
 MODULE_TYPES = ['base','build','evidence','forensic','software']
 
@@ -54,6 +58,7 @@ MODULE_TYPES = ['base','build','evidence','forensic','software']
 Packer_ISO_TYPES = ['base']
 
 ## Puppet constants
+
 # Puppet version
 PUPPET_VERSION = '3.8.7'
 

@@ -6,5 +6,3 @@ package { 'notepadplusplus':
   ensure   => installed,
   provider => 'chocolatey',
 }
-
-notice('Notepad++ install finished')

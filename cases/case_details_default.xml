@@ -92,12 +92,31 @@
         <!--<description></description>-->
       <!--</module>-->
 
+      <!--<module>-->
+        <!--<author>Jason Keighley</author>-->
+        <!--<type>evidence</type>-->
+        <!--<category>fraud</category>-->
+        <!--<name>business_invoice_1</name>-->
+        <!--<path>evidence/fraud/business_invoice_1</path>-->
+        <!--<description></description>-->
+      <!--</module>-->
+
       <module>
         <author>Jason Keighley</author>
-        <type>evidence</type>
-        <category>fraud</category>
-        <name>business_invoice_1</name>
-        <path>evidence/fraud/business_invoice_1</path>
+        <type>software</type>
+        <category>languages</category>
+        <name>python</name>
+        <path></path>
+        <description></description>
+      </module>
+
+      <module>
+        <author>Jason Keighley</author>
+        <type>software</type>
+        <category>internet_browser</category>
+        <name></name>
+        <version></version>
+        <path></path>
         <description></description>
       </module>
 
@@ -119,9 +138,21 @@
         <distro>server</distro>
         <version>2008</version>
         <path>baseboxes/windows/windows_server_2008_r2</path>
-        <url>file:///home/user/Desktop/Baseboxes/Windows_2008_metasploitable/windows_2008_server_metasploitable.box</url>
+        <url></url>
         <description>Windows server 2008 r2</description>
       </module>
+
+      <!--<module>-->
+        <!--<author>Jason Keighley</author>-->
+        <!--<type>base</type>-->
+        <!--<category>windows</category>-->
+        <!--<name></name>-->
+        <!--<distro></distro>-->
+        <!--<version>10</version>-->
+        <!--<path></path>-->
+        <!--<url></url>-->
+        <!--<description></description>-->
+      <!--</module>-->
     </modules>
 
   </system>

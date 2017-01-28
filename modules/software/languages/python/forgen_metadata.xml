@@ -2,12 +2,11 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>software</type>
-  <!--<os></os>-->
-  <category>text_editor</category>
-  <name>notepad++</name>
+  <category>languages</category>
+  <name>python</name>
   <version>0.0.1</version>
-  <path>software/text_editor/notepadplusplus</path>
-  <description>Installs notepad++</description>
+  <path>software/languages/python</path>
+  <description>Installs the python language</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
 </software>

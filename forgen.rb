@@ -11,10 +11,11 @@ require_relative "lib/constants"
 
 # Class libraries
 require "#{DIR_CLASSES}/colour"
-require "#{DIR_CLASSES}/moduleSelector"
-require "#{DIR_CLASSES}/outputGenerator"
-require "#{DIR_CLASSES}/templateGenerator"
-require "#{DIR_CLASSES}/XMLParse"
+require "#{DIR_CLASSES}/module_selector"
+require "#{DIR_CLASSES}/data_store"
+require "#{DIR_CLASSES}/output_generator"
+require "#{DIR_CLASSES}/template_generator"
+require "#{DIR_CLASSES}/xml_parse"
 
 # Method libraries
 require "#{DIR_METHOD_LIBRARIES}/schema.rb"
@@ -22,6 +23,15 @@ require "#{DIR_METHOD_LIBRARIES}/schema.rb"
 #################################################
 #################################################
 
+# Disable all command line colours
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @see Colour#disable_colours
+#
+# @return [Void]
 def disable_colour
   @colour.disable_colours
 end
@@ -29,7 +39,13 @@ end
 #################################################
 #################################################
 
-# Display help message for command line inputs.
+# Display a help message for command line inputs
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @return [Void]
 def command_help
   @colour.help '--- Welcome to ForGen, the home of custom image creation ---'
   @colour.help 'ForGen command line structure'
@@ -37,8 +53,8 @@ def command_help
   @colour.help ''
 
   @colour.help '[command: main]'
-  @colour.help " r, run\t\t\t\t Run all aspects of ForGen"
-  @colour.help "make-config\t\t\t Make configuration files for a new project"
+  @colour.help "r, run\t\t\t\t Run all aspects of ForGen"
+  @colour.help "make-configuration\t\t Make configuration files for a new project"
   @colour.help "make-vagrant-basebox\t\t Make a vagrant basebox"
   @colour.help "make-virtual-machine\t\t Make a virtual machine"
   @colour.help "make-forensic-image\t\t Make a forensic image"
@@ -92,6 +108,15 @@ end
 #################################################
 #################################################
 
+# Displays the current ForGen version number
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @see constants.rb
+#
+# @return [Void]
 def display_version
   @colour.help VERSION_NUMBER
 end
@@ -99,6 +124,15 @@ end
 #################################################
 #################################################
 
+# Displays all current ForGen cases
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @see constants.rb
+#
+# @return [Void]
 def list_cases
   Dir["#{DIR_CASES}/**/*"].select{ |file| !File.directory? file }.each_with_index do |case_name, case_number|
     @colour.help "#{case_number}) #{case_name}"
@@ -108,10 +142,17 @@ end
 #################################################
 #################################################
 
+# Lists modules of given \module type
+#
+# @param [String] module_type The type of \module to be listed
+#
+# @author Jason Keighley
+#
+# @return [Void]
 def list_modules module_type
   if module_type.empty?
-    @colour.help "ForGen module types: #{MODULE_TYPES}";
-    return;
+    @colour.help "ForGen module types: #{MODULE_TYPES}"
+    return
   end
 
   if MODULE_TYPES.include? module_type
@@ -127,6 +168,13 @@ end
 #################################################
 #################################################
 
+# Delete all current project directories
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @return [Void]
 def delete_all_projects
   FileUtils.rm_rf(Dir.glob("#{DIR_PROJECTS}/*"))
 end
@@ -145,6 +193,13 @@ end
 #################################################
 #################################################
 
+# Make all configuration files
+#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
+#
+# @author Jason Keighley
+#
+# @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_configuration(options)
   options[:number_of_matching_conditions] = 3 unless options.has_key? :number_of_matching_conditions
 
@@ -164,16 +219,19 @@ def make_configuration(options)
   # Convert xml case file to ruby hash
   case_hash = xml_parse.xml_file_to_hash(options[:case_path])
 
+  # Parse datastore information from dataStore and save to options[:data_store]
+  dataStore = DataStore.new(@colour ,case_hash)
+
+  dataStore.parse_case_hash
+
+  options[:data_store] = dataStore.get_datastore
+
   ### Select Configuration modules
   # TODO: Make module selector create array hash structure for single modules in xml file ({:provisioner}=>[{"Module_name"}=>{Mod_info_1=>Mod_val_1, Mod_info_2=>Mod_val_2, Mod_info_3=>Mod_val_3}])
   moduleSelector = ModuleSelector.new(@colour, options, xml_parse, case_hash)
   options[:base_module], config_modules = moduleSelector.select_modules
 
-  # @colour.error 'config_modules'
-  # @colour.error config_modules
-  # @colour.error ''
-
-  options[:project_dir] = "#{DIR_PROJECTS}/ForGen_Project_#{Time.now.strftime("%Y-%m-%d_%H:%M:%S")}"
+  options[:project_dir] = "#{DIR_PROJECTS}/ForGen_Project_#{Time.now.strftime("%Y-%m-%d_%H-%M-%S")}" unless options[:project_dir]
   options[:basebox_url] = "#{options[:project_dir]}/#{options[:base_module][:name]}_#{options[:virtualisation_provider]}.box" unless options.has_key? :basebox_url
   options[:basebox_name] = options[:basebox_url].split('/').last
   options[:vm_name] = options[:project_dir].split("/").last #unless options.has_key? [:vm_name] # <-- Could have multiple vms
@@ -231,6 +289,13 @@ end
 #################################################
 #################################################
 
+# Make a vagrant basebox
+#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
+#
+# @author Jason Keighley
+#
+# @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_vagrant_basebox(options)
   @colour.notify 'Creating Vagrant basebox'
   @colour.notify 'Executing packer build (this may take a while)'
@@ -243,6 +308,13 @@ end
 #################################################
 #################################################
 
+# Make all virtualbox virtual machines
+#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
+#
+# @author Jason Keighley
+#
+# @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_virtualbox_vm(options)
   @colour.notify "Ensuring following commands run from directory '#{options[:project_dir]}/Vagrantfile'"
   @colour.notify 'Executing vagrant up (this may take a while)'
@@ -259,6 +331,15 @@ end
 #################################################
 #################################################
 
+# Make forensic image helper methods
+#################################################
+# Create an EWF forensic image
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @return [Void]
 def create_ewf_image(drive_path ,image_output_location)
   ## Make E01 image
   @colour.notify "Creating E01 image with path #{image_output_location}.E01"
@@ -266,6 +347,13 @@ def create_ewf_image(drive_path ,image_output_location)
   @colour.notify "E01 image #{image_output_location}.E01 created" if system "ftkimager '#{drive_path}' '#{image_output_location}' --e01"
 end
 
+# Create an DD forensic image
+#
+# @param [Void]
+#
+# @author Jason Keighley
+#
+# @return [Void]
 def create_dd_image(drive_path, image_output_location)
   ## Make DD image
   @colour.notify "Creating dd image with path #{image_output_location}.raw"
@@ -273,12 +361,29 @@ def create_dd_image(drive_path, image_output_location)
   @colour.notify "Raw image #{image_output_location}.raw created" if system "aBoxManage clonemedium disk '#{drive_path}' '#{image_output_location}.raw' --format RAW"
 end
 
+# Delete virtualbox virtual machine
+#
+# @param [String] vm_name Virtual machine name in VirtualBox
+#
+# @author Jason Keighley
+#
+# @return [Void]
 def delete_virtualbox_vm(vm_name)
   @colour.notify "Deleting VirtualBox VM #{vm_name}"
   @colour.notify "VirtualBox VM #{vm_name} deleted" if system "VBoxManage unregistervm #{vm_name} --delete"
 end
 
-def make_forensics_image(options)
+# Make forensic image helper methods \end
+#################################################
+
+# Make forensic image
+#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
+#
+# @author Jason Keighley
+#
+# @return [Hash] options Main options hash containing all options for the running ForGen instance
+def make_forensic_image(options)
   drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*/, '').sub(/\n/, '')
   # drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*|\n\Z/, '')
   drive_name = drive_path.split('/').last
@@ -502,21 +607,18 @@ case ARGV[0]
     # # Set Packer iso location to default [Windows server 2008] if not set (no base module selected)
     # options[:packer_iso_location] = '/home/user/Downloads/7601.17514.101119-1850_x64fre_server_eval_en-us-GRMSXEVAL_EN_DVD.iso'
 
-    ### Make configuration
+    # Make configuration
     make_configuration(options)
-
-    ### Make Vagrant basebox (packer)
+    # Make Vagrant basebox (packer)
     make_vagrant_basebox(options)
-
-    ### Make Virtualbox image (vagrant)
+    # Make Virtualbox image (vagrant)
     make_virtualbox_vm(options)
-
-    ### Make forensic image
-    make_forensics_image(options)
+    # Make forensic image
+    make_forensic_image(options)
 
     @colour.notify 'Run command finished'
 
-  when 'make-config'
+  when 'make-configuration'
     @colour.notify 'Making configuration files'
     make_configuration(options)
 
@@ -537,14 +639,14 @@ case ARGV[0]
     @colour.notify 'Making forensic image'
     make_vagrant_basebox(options)
     make_virtualbox_vm(options)
-    make_forensics_image(options)
+    make_forensic_image(options)
 
   else
     @colour.error "[#{ARGV[0]}] is not a valid ForGen command"
 
   # options = make_config(options)
   # options = make_virtualbox_image(options)
-  # options = make_forensics_image(options)
+  # options = make_forensic_image(options)
   # options = make_test_sheets(options)
   # options = make_mark_sheets(options)
 

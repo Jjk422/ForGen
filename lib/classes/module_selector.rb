@@ -1,3 +1,9 @@
+# Selects, sorts, compares currently usable ForGen modules and
+#
+# @author Jason Keighley
+# @since 0.0.1
+# @attr_reader [Void]
+# @attr_writer [Void]
 class ModuleSelector
   def initialize(colour, options, xml_parse, case_hash)
     @colour = colour
@@ -14,7 +20,9 @@ class ModuleSelector
     end
 
     # Get all forgen_metadata.xml paths
-    forgen_metadata_paths = Dir["#{DIR_MODULES}/**/**/**/*"].select{ |file| File.file?(file) && file.include?('forgen_metadata.xml') }
+    forgen_metadata_paths = Dir["#{DIR_MODULES}/**/**/**/*"].select do
+        |file| File.file?(file) && file.include?('forgen_metadata.xml')
+    end
 
     # Parse all forgen_metadata.xml files
     module_hash = Array.new
@@ -83,8 +91,8 @@ class ModuleSelector
         @colour.notify "Checking if module '#{details[:path]}' matches configuration in #{@options[:case_path]}"
         desired_modules.each do |desired_module_type|
           desired_module_type.each do |desired_module_details|
-            if (desired_module_details.select{|k,v| details[k.to_sym] == v }.size >= @options[:number_of_matching_conditions])
-              @colour.notify "Module #{details[:path]} matches at least #{@options[:number_of_matching_conditions]} desired conditions"
+            if (desired_module_details.select{ |module_name, module_information| details[module_name.to_sym] == module_information }.size >= @options[:number_of_matching_conditions])
+              @colour.urgent "Module #{details[:path]} matches at least #{@options[:number_of_matching_conditions]} desired conditions"
 
               # selected_modules["#{details[:type]}_#{details[:category]}_#{details[:name]}"] = details
               selected_modules["#{details[:path].gsub(/(\\|\/)/,'_').to_sym}"] = details

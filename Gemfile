@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 # Production gems go here
-gem 'fileutils'
 gem 'nokogiri'
 gem 'nori'
 gem 'librarian-puppet'

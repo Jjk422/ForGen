@@ -1,0 +1,12 @@
+<software>
+  <!-- Module information-->
+  <author>Jason Keighley</author>
+  <type>software</type>
+  <category>internet_browser</category>
+  <name>internet_explorer_11</name>
+  <version>0.0.1</version>
+  <path>software/internet_browser/internet_explorer_11</path>
+  <description>Installs the web browser Internet Explorer 11</description>
+  <provider>Puppet</provider>
+  <manifest_file>init.pp</manifest_file>
+</software>

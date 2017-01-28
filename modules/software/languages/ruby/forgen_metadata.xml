@@ -4,7 +4,7 @@
   <type>software</type>
   <category>languages</category>
   <name>ruby</name>
-  <version></version>
+  <version>0.0.1</version>
   <path>software/languages/ruby</path>
   <description>Installs the ruby language</description>
   <provider>Puppet</provider>

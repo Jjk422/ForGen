@@ -67,6 +67,10 @@ class Colour
     output('puts','text_help',text)
   end
 
+  def urgent(text)
+    output('puts','text_urgent',text)
+  end
+
   def error(text)
     output('puts','text_error',text)
   end
