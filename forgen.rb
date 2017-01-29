@@ -236,6 +236,8 @@ def make_configuration(options)
   options[:basebox_name] = options[:basebox_url].split('/').last
   options[:vm_name] = options[:project_dir].split("/").last #unless options.has_key? [:vm_name] # <-- Could have multiple vms
 
+  Dir.mkdir("#{DIR_ROOT}/projects") unless File.directory? "#{DIR_ROOT}/projects"
+
   # Make project directory
   @colour.notify "Creating new project directory '#{options[:project_dir]}'"
   Dir.mkdir(options[:project_dir])
