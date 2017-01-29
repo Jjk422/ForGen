@@ -91,6 +91,8 @@ class ModuleSelector
         @colour.notify "Checking if module '#{details[:path]}' matches configuration in #{@options[:case_path]}"
         desired_modules.each do |desired_module_type|
           desired_module_type.each do |desired_module_details|
+            # @options[:number_of_matching_conditions] = desired_module_details.select{ |module_name, module_information|  }
+
             if (desired_module_details.select{ |module_name, module_information| details[module_name.to_sym] == module_information }.size >= @options[:number_of_matching_conditions])
               @colour.urgent "Module #{details[:path]} matches at least #{@options[:number_of_matching_conditions]} desired conditions"
 

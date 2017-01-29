@@ -102,9 +102,9 @@ config.vm.provision "puppet" do | <%= module_name %>|
   # temp_dir = [The directory where all the data associated with the Puppet run (manifest files, modules, etc.) will be stored on the guest machine]
   # working_directory = [Path in the guest that will be the working directory when Puppet is executed]
 
-  puppet.facter = {
-      "data_store" => "<%= @options[:data_store] %>"
-  }
+  # puppet.facter = {
+  #     "data_store" => "<%= @options[:data_store] %>"
+  # }
 
       <% if @options.has_key? :verbose -%>
   puppet.options = "--verbose"

@@ -280,7 +280,7 @@ def make_configuration(options)
   outputGenerator.create_xml_output_file("#{options[:project_dir]}/CaseDetails.xml")
 
   ## Create puppet module structure withing project directory using librarian-puppet
-  @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir]}"
+  @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir].split('/').last}"
   exit 0 unless system "cd #{options[:project_dir]} && librarian-puppet install"
 
   return options
