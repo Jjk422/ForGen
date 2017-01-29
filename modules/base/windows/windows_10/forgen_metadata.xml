@@ -1,14 +1,14 @@
-<base>
-  <author>Jason Keighley</author>
-  <type>base</type>
-  <category>windows</category>
-  <name>windows_10</name>
-  <distro>desktop</distro>
-  <version>10</version>
-  <path>base/windows/windows_10</path>
-  <description>Windows server 2008 r2</description>
-  <iso_url>https://software-download.microsoft.com/pr/Win10_1607_English_x64.iso?t=f66f43f0-9896-4b1f-bcbf-7b8425df8934&e=1485681622&h=64a06baab0dbadf2cf5b435b218d1f53</iso_url>
-  <!--<iso_url></iso_url>-->
-  <iso_checksum>4263be2cf3c59177c45085c0a7bc6ca5</iso_checksum>
-  <iso_checksum_type>md5</iso_checksum_type>
-</base>
+<!--<base>-->
+  <!--<author>Jason Keighley</author>-->
+  <!--<type>base</type>-->
+  <!--<category>windows</category>-->
+  <!--<name>windows_10</name>-->
+  <!--<distro>desktop</distro>-->
+  <!--<version>10</version>-->
+  <!--<path>base/windows/windows_10</path>-->
+  <!--<description>Windows server 2008 r2</description>-->
+  <!--<iso_url>https://software-download.microsoft.com/pr/Win10_1607_English_x64.iso?t=f66f43f0-9896-4b1f-bcbf-7b8425df8934&e=1485681622&h=64a06baab0dbadf2cf5b435b218d1f53</iso_url>-->
+  <!--&lt;!&ndash;<iso_url></iso_url>&ndash;&gt;-->
+  <!--<iso_checksum>4263be2cf3c59177c45085c0a7bc6ca5</iso_checksum>-->
+  <!--<iso_checksum_type>md5</iso_checksum_type>-->
+<!--</base>-->

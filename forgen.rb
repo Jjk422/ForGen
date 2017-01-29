@@ -262,7 +262,7 @@ def make_configuration(options)
 
   # Validate Packerfile
   @colour.notify 'Validating generated Packerfile'
-  exit 0 unless system "cd #{options[:project_dir]} && packer validate Packerfile"
+  exit 0 unless system "cd '#{options[:project_dir]}' && packer validate Packerfile"
 
   ## Vagrant
   # Generate Vagrantfile
@@ -283,7 +283,7 @@ def make_configuration(options)
 
   ## Create puppet module structure withing project directory using librarian-puppet
   @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir].split('/').last}"
-  exit 0 unless system "cd #{options[:project_dir]} && librarian-puppet install"
+  exit 0 unless system "cd '#{options[:project_dir]}' && librarian-puppet install"
 
   return options
 end
@@ -302,7 +302,7 @@ def make_vagrant_basebox(options)
   @colour.notify 'Creating Vagrant basebox'
   @colour.notify 'Executing packer build (this may take a while)'
 # TODO: Sort out verbose mode for Packer
-  exit 0 unless system "cd #{options[:project_dir]} && packer build #{'PACKER_LOG=1' if options[:verbose]} #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
+  exit 0 unless system "cd '#{options[:project_dir]}' && packer build #{'PACKER_LOG=1' if options[:verbose]} #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
 
   return options
 end
@@ -322,9 +322,9 @@ def make_virtualbox_vm(options)
   @colour.notify 'Executing vagrant up (this may take a while)'
 
   if options.has_key? :debug
-    system "cd #{options[:project_dir]} && vagrant up --debug"
+    system "cd '#{options[:project_dir]}' && vagrant up --debug"
   else
-    system "cd #{options[:project_dir]} && vagrant up"
+    system "cd '#{options[:project_dir]}' && vagrant up"
   end
 
   return options
@@ -394,7 +394,7 @@ def make_forensic_image(options)
 
   unless options.has_key? :no_vm_shutdown
     ## Ensure all vms are shutdown
-    system "cd #{options[:project_dir]} && vagrant halt"
+    system "cd '#{options[:project_dir]}' && vagrant halt"
 
     if options.has_key? :create_raw_image
      create_dd_image(drive_path, options[:image_output_location])
