@@ -12,7 +12,7 @@
 <% if @options.has_key? :number_of_processors -%>
   [ "modifyvm", "{{.Name}}", "--cpus", "<%= @options[:number_of_processors] -%>" ],
 <% end -%>
-  [ "modifyvm", "{{.Name}}", "--natpf1", "winrm,tcp,,55985,,5985" ]
+  [ "modifyvm", "{{.Name}}", "--natpf1", "winrm,tcp,,5985,,5985" ]
   ],
   "guest_os_type": "Windows2008_64",
   "disk_size": 61440,
@@ -22,15 +22,14 @@
   "communicator": "winrm",
   "winrm_username": "vagrant",
   "winrm_password": "vagrant",
-  "winrm_port": "55985",
+  "winrm_port": "5985",
   "winrm_timeout": "5h",
   "guest_additions_mode": "attach",
   "guest_additions_path": "Z:",
   "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
   "shutdown_timeout": "1h",
   "floppy_files": [
-  "Autounattend.xml",
-  "windows.ps1"
+  "Autounattend.xml"
   ]
   }],
   "provisioners": [

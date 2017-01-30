@@ -1,4 +1,6 @@
 TODO:
+Sort out packer winrm_port error, so non-default windows winrm port can be used
+
 Add OS directory (windows, unix, linux, bsd) to modules directory
 
 Facter inplementation (Datastore)
