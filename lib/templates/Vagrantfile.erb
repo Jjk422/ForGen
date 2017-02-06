@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |v|
     v.name = "<%= @options[:vm_name] %>"
-    v.gui = <%= @options.has_key? :gui_output -%>
+    v.gui = <%= @options.has_key? :gui_output %>
     <% if @options.has_key? :max_processor_cap -%>
     v.customize ["modifyvm", :id, "--cpuexecutioncap", "<%= @options[:max_processor_cap] %>"]
     <% end -%>
@@ -61,71 +61,65 @@ Vagrant.configure("2") do |config|
     <% end %>
   end
 
-  # config.vm.provision
+# config.vm.provision
   <% @config_modules.each do | provisioner, modules | -%>
     <% case provisioner
       when :Puppet -%>
-# config.vm.provision "puppet" do |puppet|
-  # TODO: Make build modules dynamic and not hard coded
-  # Build modules
-  # puppet.manifests_path = "<%= @options[:project_dir] %>/modules/stdlib/manifests"
-  # puppet.manifests_path = "<%= @options[:project_dir] %>/modules/chocolatey/manifests"
 
-  puppet.module_path = "<%= @options[:project_dir] %>/modules"
+# Build Modules
+#config.vm.provision "puppet" do | build_stdlib |
+#  # TODO: Make build modules dynamic and not hard coded
+#  # Build modules
+#  build_stdlib.manifest_file = "init.pp"
+#  build_stdlib.manifests_path = "<%= @options[:project_dir] %>/modules/stdlib/manifests"
+#end
+#
+#config.vm.provision "puppet" do | build_chocolatey |
+#  build_chocolatey.manifest_file = "init.pp"
+#  build_chocolatey.manifests_path = "<%= @options[:project_dir] %>/modules/chocolatey/manifests"
+#end
 
+#####
 
-  #####
-
-  # Config modules
-
-    # puppet.manifest_file = Defaults to 'default.pp'
-    # puppet.manifest_file = "init.pp"
-    # puppet.manifests_path = Defaults to 'manifests'
+# Custom modules
 
       <% modules.each do | module_root | -%>
         <% module_root.each do | module_name, module_information| %>
 
-config.vm.provision "puppet" do | <%= module_name %>|
+config.vm.provision "puppet" do | <%= module_name %> |
 
-  puppet.manifest_file = "<%= module_information[:manifest_file] %>"
-
-  puppet.manifests_path = "<%= @options[:project_dir] %>/modules/<%= module_name %>/manifests"
-
-  # puppet.module_path = "<%= @options[:project_dir] %>/modules/<%= module_name %>"
-
-  # puppet.module_path = "<%= @options[:project_dir] %>/modules"
-  # environment = [Name of the puppet environment]
-  # environment_path = [Path to the directory containing environment files on the host disk]
-  # environment_variables = {Hash} [A hash of string key/value pairs to be set as environment variables before the puppet apply run]
-  # synced_folder_type = Defaults to "#{Default synced folder type}"
-  # synced_folder_args = {Array} [Arguments that are passed to the folder sync]
-  # temp_dir = [The directory where all the data associated with the Puppet run (manifest files, modules, etc.) will be stored on the guest machine]
-  # working_directory = [Path in the guest that will be the working directory when Puppet is executed]
+  <%= module_name %>.module_path = "<%= @options[:project_dir] %>/modules"
+  <%= module_name %>.manifest_file = "<%= module_information[:manifest_file] %>"
+  <%= module_name %>.manifests_path = "<%= @options[:project_dir] %>/modules/<%= module_name %>/manifests"
 
   # puppet.facter = {
   #     "data_store" => "<%= @options[:data_store] %>"
   # }
 
       <% if @options.has_key? :verbose -%>
-  puppet.options = "--verbose"
+  <%= module_name %>.options = "--verbose"
       <% end -%>
       <% if @options.has_key? :debug -%>
-  puppet.options = "--debug"
+  <%= module_name %>.options = "--debug"
       <% end -%>
-  #   puppet.options = "--verbose --debug"
     <% end -%>
 
             end
         <% end -%>
     <% end -%>
 
-  #####
+#####
 
-  # Cleanup modules
+# Cleanup modules
+#config.vm.provision "puppet" do | cleanup_module_name |
+#    # TODO: Make build modules dynamic and not hard coded
+#    # Build modules
+#  cleanup_module_name.module_path = "<%= @options[:project_dir] %>/modules"
+#  cleanup_module_name.manifests_path = "<%= @options[:project_dir] %>/modules/cleanup_module_name/manifests"
+#end
 
 
-
-  #####
+#####
 
   <% end -%>
 end

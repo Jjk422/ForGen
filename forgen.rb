@@ -67,16 +67,16 @@ def command_help
   @colour.help "--list-modules <type>\t\t List <type> modules that are in ForGen"
   @colour.help ''
 
+  @colour.help '[command: projects]'
+  @colour.help "--delete-all-projects\t\t Deletes ALL projects in the projects directory"
+  @colour.help ''
+
   @colour.help '[options: stdout]'
   @colour.help "--disable-colours\t\t Disable all std output colour formatting"
   @colour.help ''
 
   @colour.help '[options: cases]'
   @colour.help "--case-path\t\t\t The path to the case file to use"
-  @colour.help ''
-
-  @colour.help '[options: projects]'
-  @colour.help "--delete-all-projects\t\t Deletes ALL projects in the projects directory"
   @colour.help ''
 
   @colour.help '[options: forensic images]'
@@ -257,6 +257,9 @@ def make_configuration(options)
   # @colour.notify 'Creating Provisioner_install.ps1.erb'
   # templateGenerator.create_template_file("#{DIR_TEMPLATE}/Provisioner_install.ps1.erb","#{options[:project_dir]}/Provisioner_install.ps1")
 
+  @colour.notify 'Copying virtualbox_guest_additions_install_scripts to project directory'
+  templateGenerator.cp_template("#{DIR_TEMPLATE}/virtualbox_guest_additions_install_scripts/windows.bat","#{options[:project_dir]}/windows.bat")
+
   @colour.notify 'Copying puppet_install_script to project directory'
   templateGenerator.cp_template("#{DIR_TEMPLATE}/puppet_install_scripts/windows.ps1","#{options[:project_dir]}/windows.ps1")
 
@@ -282,7 +285,7 @@ def make_configuration(options)
   outputGenerator.create_xml_output_file("#{options[:project_dir]}/CaseDetails.xml")
 
   ## Create puppet module structure withing project directory using librarian-puppet
-  @colour.notify "Creating Puppet module struction using librarian-puppet for project #{options[:project_dir].split('/').last}"
+  @colour.notify "Creating Puppet module structure using librarian-puppet for project #{options[:project_dir].split('/').last} (This may take a while)"
   exit 0 unless system "cd '#{options[:project_dir]}' && librarian-puppet install"
 
   return options

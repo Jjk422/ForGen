@@ -1,8 +1,8 @@
 include chocolatey
 
-notice('Installing notepad++')
+notice('Installing python')
 
-package { 'notepadplusplus':
+package { 'python':
   ensure   => installed,
   provider => 'chocolatey',
 }

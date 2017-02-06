@@ -4,7 +4,7 @@
   "headless": <%= !@options.has_key?(:gui_output) %>,
   "vboxmanage": [
 <% if @options.has_key? :max_processor_cap -%>
-  [ "modifyvm", :id, "--cpuexecutioncap", "<%= @options[:max_processor_cap] %>" ],
+  [ "modifyvm", "{{.Name}}", "--cpuexecutioncap", "<%= @options[:max_processor_cap] %>" ],
 <% end -%>
 <% if @options.has_key? :max_memory_usage -%>
   [ "modifyvm", "{{.Name}}", "--memory", "<%= @options[:max_memory_usage] -%>" ],
@@ -35,13 +35,7 @@
   "provisioners": [
     {
     "type": "windows-shell",
-    "inline": [
-    "echo 'Installing VirtualBox drivers'",
-    "cmd.exe /c E:\\VBoxWindowsAdditions.exe /S /extract /D=C:\\Drivers",
-    "echo 'Installing VirtualBox guest additions",
-    "cmd.exe /c C:\\Drivers\\VBoxGuestAdditions.exe /S",
-    "echo 'VirtualBox guest additions installed'"
-    ]
+    "script": "<%= 'windows.bat' -%>"
     },
     {
     "type": "powershell",
