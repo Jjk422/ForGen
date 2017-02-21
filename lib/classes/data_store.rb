@@ -1,9 +1,8 @@
-# Selects, sorts, compares currently usable ForGen modules and
+# Creates data store to be used for test sheets, mark sheets
+# and facter insertion.
 #
 # @author Jason Keighley
 # @since 0.0.1
-# @attr_reader [Void]
-# @attr_writer [Void]
 class DataStore
   # Example datastore
   # Datastore = [:name => [:person => [:male => ["Bob"], :female => ["Jill"]], :business => [:bank => ["Lloyds bank"]]]]
@@ -55,26 +54,43 @@ class DataStore
   #     }
   #   }
 
-def initialize(colour, case_hash)
+  # Initialisation method for the DataStore class
+  #
+  # @author Jason Keighley
+  # @private
+  # @param [Object] colour Colour object to print coloured output to console
+  # @param [Hash] case_hash case_hash Hash containing all /case details
+  # @return [void]
+  def initialize(colour, case_hash)
     @colour = colour
     @case_hash = case_hash
     @datastore = Hash.new
   end
 
+  # Method to parse given case hash to build and save to @datastore class variable
+  #
+  # @author Jason Keighley
+  # @private
+  # @return [Void]
   :private
   def parse_case_hash
     @case_hash.each_value do | system |
       system.each_value do | category |
         category.each do | category, category_information |
-            unless category == :modules
-              @datastore[category.to_sym] = Array.new
-              @datastore[category.to_sym] << category_information
-            end
+          unless category == :modules
+            @datastore[category.to_sym] = Array.new
+            @datastore[category.to_sym] << category_information
           end
         end
+      end
     end
   end
 
+  # Method to return the saved datastore from the DataStore class
+  #
+  # @author Jason Keighley
+  # @public
+  # @return [Hash] @datastore
   :public
   def get_datastore
     return @datastore

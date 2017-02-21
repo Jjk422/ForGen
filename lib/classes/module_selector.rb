@@ -2,9 +2,14 @@
 #
 # @author Jason Keighley
 # @since 0.0.1
-# @attr_reader [Void]
-# @attr_writer [Void]
 class ModuleSelector
+  # Initialisation method for the ModuleSelector class
+  #
+  # @author Jason Keighley
+  # @param [Object] colour Colour object to print coloured output to console
+  # @param [Hash] options Options hash containing all command line options
+  # @param [Object] xml_parse Nori parser
+  # @param [Hash] case_hash case_hash Hash containing all /case details
   def initialize(colour, options, xml_parse, case_hash)
     @colour = colour
     @options = options
@@ -12,6 +17,12 @@ class ModuleSelector
     @xml_parse = xml_parse
   end
 
+  # Select modules for system
+  #
+  # @author Jason Keighley
+  # @return base_module [Hash] All details about selected base /module
+  # @return config_modules [Hash] All details about all configuration modules
+  # return base_module, config_modules
   def select_modules
     # Create array of desired modules from ruby hash
     desired_modules = Array.new
@@ -21,7 +32,7 @@ class ModuleSelector
 
     # Get all forgen_metadata.xml paths
     forgen_metadata_paths = Dir["#{DIR_MODULES}/**/**/**/*"].select do
-        |file| File.file?(file) && file.include?('forgen_metadata.xml')
+    |file| File.file?(file) && file.include?('forgen_metadata.xml')
     end
 
     # Parse all forgen_metadata.xml files

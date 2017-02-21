@@ -1,9 +1,17 @@
+# Main file generator class, all non template files are generated
+# with this class
+#
+# @author Jason Keighley
+# @since 0.0.1
+# @!attribute [rw] :options Options hash containing all options data
 class OutputGenerator
   attr_accessor :options
 
-  # Initialise the output generator with all the case
-  # information given in the case hash [case_hash] and
-  # any options given in the options hash [options]
+  # Initialisation method for the OutputGenerator class
+  #
+  # @author Jason Keighley
+  # @param [Hash] options Options hash containing all command line options
+  # @param [Hash] case_hash Contains all /case details
   def initialize(options, case_hash)
     @options = options
     @case_details = case_hash
@@ -11,6 +19,11 @@ class OutputGenerator
 
   # Create the xml output file from the case details
   # stored in the hash @case_details
+  #
+  # Initialisation method for the OutputGenerator class
+  #
+  # @author Jason Keighley
+  # @param [String] output_file_path File path for the created xml file
   def create_xml_output_file(output_file_path)
     # puts @case_details
 

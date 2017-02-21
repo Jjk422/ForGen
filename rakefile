@@ -5,7 +5,7 @@ task :default => [:yard]
 desc "Generate_yard_documentation"
 task :yard do
   require 'yard'
-  require_relative 'library/CONSTANTS'
+  require_relative 'lib/constants'
 
   YARD::Rake::YardocTask.new do |t|
     # Files to include in yard documentation.
@@ -14,7 +14,7 @@ task :yard do
     ]
     # Extra options for the yard documentation
     t.options = [
-        "--title=ForGen #{VERSION_NUMBER} Documentation",
+        "--title=ForGen #{FORGEN_VERSION_NUMBER} Documentation",
         "--readme=#{DIR_ROOT}/README.md",
         "--output-dir=#{DIR_DOCUMENTATION_OUTPUT_PATH}" "#{DIR_DOCUMENTATION_OUTPUT_NAME}" ,
         "--no-save"

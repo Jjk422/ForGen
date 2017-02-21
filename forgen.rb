@@ -25,12 +25,8 @@ require "#{DIR_METHOD_LIBRARIES}/schema.rb"
 
 # Disable all command line colours
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @see Colour#disable_colours
-#
 # @return [Void]
 def disable_colour
   @colour.disable_colours
@@ -41,10 +37,7 @@ end
 
 # Display a help message for command line inputs
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @return [Void]
 def command_help
   @colour.help '--- Welcome to ForGen, the home of custom image creation ---'
@@ -110,15 +103,11 @@ end
 
 # Displays the current ForGen version number
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @see constants.rb
-#
 # @return [Void]
 def display_version
-  @colour.help VERSION_NUMBER
+  @colour.help FORGEN_VERSION_NUMBER
 end
 
 #################################################
@@ -126,12 +115,8 @@ end
 
 # Displays all current ForGen cases
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @see constants.rb
-#
 # @return [Void]
 def list_cases
   Dir["#{DIR_CASES}/**/*"].select{ |file| !File.directory? file }.each_with_index do |case_name, case_number|
@@ -144,10 +129,8 @@ end
 
 # Lists modules of given \module type
 #
-# @param [String] module_type The type of \module to be listed
-#
 # @author Jason Keighley
-#
+# @param [String] module_type The type of \module to be listed
 # @return [Void]
 def list_modules module_type
   if module_type.empty?
@@ -170,10 +153,7 @@ end
 
 # Delete all current project directories
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @return [Void]
 def delete_all_projects
   FileUtils.rm_rf(Dir.glob("#{DIR_PROJECTS}/*"))
@@ -195,10 +175,8 @@ end
 
 # Make all configuration files
 #
-# @param [Hash] options Main options hash containing all options for the running ForGen instance
-#
 # @author Jason Keighley
-#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
 # @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_configuration(options)
   options[:number_of_matching_conditions] = 3 unless options.has_key? :number_of_matching_conditions
@@ -313,12 +291,10 @@ end
 #################################################
 #################################################
 
-# Make all virtualbox virtual machines
-#
-# @param [Hash] options Main options hash containing all options for the running ForGen instance
+# Make all VirtualBox virtual machines
 #
 # @author Jason Keighley
-#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
 # @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_virtualbox_vm(options)
   @colour.notify "Ensuring following commands run from directory '#{options[:project_dir]}/Vagrantfile'"
@@ -340,10 +316,7 @@ end
 #################################################
 # Create an EWF forensic image
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @return [Void]
 def create_ewf_image(drive_path ,image_output_location)
   ## Make E01 image
@@ -354,10 +327,7 @@ end
 
 # Create an DD forensic image
 #
-# @param [Void]
-#
 # @author Jason Keighley
-#
 # @return [Void]
 def create_dd_image(drive_path, image_output_location)
   ## Make DD image
@@ -368,10 +338,8 @@ end
 
 # Delete virtualbox virtual machine
 #
-# @param [String] vm_name Virtual machine name in VirtualBox
-#
 # @author Jason Keighley
-#
+# @param [String] vm_name Virtual machine name in VirtualBox
 # @return [Void]
 def delete_virtualbox_vm(vm_name)
   @colour.notify "Deleting VirtualBox VM #{vm_name}"
@@ -383,10 +351,8 @@ end
 
 # Make forensic image
 #
-# @param [Hash] options Main options hash containing all options for the running ForGen instance
-#
 # @author Jason Keighley
-#
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
 # @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_forensic_image(options)
   drive_path = %x(VBoxManage list hdds | grep '#{options[:project_dir].split('/').last}').sub(/\ALocation:\s*/, '').sub(/\n/, '')
@@ -649,9 +615,6 @@ case ARGV[0]
   else
     @colour.error "[#{ARGV[0]}] is not a valid ForGen command"
 
-  # options = make_config(options)
-  # options = make_virtualbox_image(options)
-  # options = make_forensic_image(options)
   # options = make_test_sheets(options)
   # options = make_mark_sheets(options)
 

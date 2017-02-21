@@ -67,5 +67,5 @@ PUPPET_MODULE_TYPES = ['evidence', 'software', 'forensic','software']
 
 ## Version Constants
 
-# Version number
-VERSION_NUMBER = '0.0.1'
+# ForGen Version number
+FORGEN_VERSION_NUMBER = '0.0.1'
