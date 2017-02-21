@@ -264,7 +264,7 @@ def make_configuration(options)
 
   ## Create puppet module structure withing project directory using librarian-puppet
   @colour.notify "Creating Puppet module structure using librarian-puppet for project #{options[:project_dir].split('/').last} (This may take a while)"
-  exit 0 unless system "cd '#{options[:project_dir]}' && librarian-puppet install"
+  exit 0 unless system "cd '#{options[:project_dir]}' && librarian-puppet install #{'--verbose' if options[:verbose]}"
 
   return options
 end
@@ -283,7 +283,7 @@ def make_vagrant_basebox(options)
   @colour.notify 'Creating Vagrant basebox'
   @colour.notify 'Executing packer build (this may take a while)'
 # TODO: Sort out verbose mode for Packer
-  exit 0 unless system "cd '#{options[:project_dir]}' && packer build #{'PACKER_LOG=1' if options[:verbose]} #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
+  exit 0 unless system "cd '#{options[:project_dir]}' && #{'PACKER_LOG=1' if options[:verbose]} packer build  #{'--debug' if options[:debug]} #{'-color=false' if options[:disable_colour]} Packerfile"
 
   return options
 end
