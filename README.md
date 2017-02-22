@@ -13,7 +13,28 @@ ForGen should be fully machine independent, however a list of needed software fo
 * [ftkimager](http://accessdata.com/product-download)
 
 ### Ubuntu
-TODO: apt-get command that installs all software with correct versions
+*Please note: Parts of the code containing [] need to be replaced by the stated value*  
+cd [ForGen_installation_path]
+#### Install FTKimager
+curl -o ftkimager.tar.gz https://ad-zip.s3.amazonaws.com/ftkimager.3.1.1_ubuntu32.tar.gz  
+tar -xvzf ftkimager.tar.gz  
+rm ftkimager.tar.gz  
+#### Install Vagrant
+curl -o vagrant.deb https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb  
+sudo dpkg -i vagrant.deb  
+rm vagrant.deb  
+#### Install Packer
+curl -o packer.zip https://releases.hashicorp.com/packer/0.12.2/packer_0.12.2_linux_amd64.zip  
+unzip packer.zip  
+rm packer.zip  
+#### Add program binaries to path
+export PATH=$PATH:[ForGen_Installation_path]/packer:[ForGen_installation_path]/ftkimager  
+#### Install Ruby/VirtualBox/Puppet
+sudo apt-get install virtualbox build-essential patch ruby-dev zlib1g-dev liblzma-dev puppet  
+#### Install Bundler gem
+sudo gem install bundler  
+#### Install all other Gems
+bundle install  
 
 ### Windows
 TODO: list web pages with download links (maybe with chocolatey used)
@@ -27,7 +48,7 @@ Due to how ForGen is built, it includes multiple features, including, but not li
 * Forensic image creation (intended use)
 * Unique tests based off of the generated virtual machines
 * Unique tests based off of the generated forensic images
-* Corresponding mark sheets that can be marked useing ForGen (the marks for questions can be assigned manually or  dynamically)
+* Corresponding mark sheets that can be marked using ForGen (the marks for questions can be assigned manually or  dynamically)
 * Ability to randomise and ensure continuously unique output of all of the above
 
 ## Usage
