@@ -300,11 +300,7 @@ def make_virtualbox_vm(options)
   @colour.notify "Ensuring following commands run from directory '#{options[:project_dir]}/Vagrantfile'"
   @colour.notify 'Executing vagrant up (this may take a while)'
 
-  if options.has_key? :debug
-    system "cd '#{options[:project_dir]}' && vagrant up --debug"
-  else
-    system "cd '#{options[:project_dir]}' && vagrant up"
-  end
+  system "cd '#{options[:project_dir]}' && vagrant up #{'--debug' if options[:debug]} #{'--no-color' if options[:disable_colour]}"
 
   return options
 end

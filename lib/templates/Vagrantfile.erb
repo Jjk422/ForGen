@@ -19,8 +19,10 @@ Vagrant.configure("2") do |config|
   # config.vm.box_version = #{Version number, defaults to latest}
   # config.vm.communicator = 'Default ssh' / 'winrm' for windows guests
   config.vm.communicator = 'winrm'
-  config.vm.boot_timeout = 600
-  config.vm.graceful_halt_timeout = 600
+  # config.vm.boot_timeout = 600
+  config.vm.boot_timeout = 10000
+  # config.vm.graceful_halt_timeout = 600
+  config.vm.graceful_halt_timeout = 10000
   # config.vm.graceful_halt_timeout = Default '60' seconds
   # config.vm.guest = Defaults to ':linux' / windows ':windows'
   config.vm.guest = :windows
