@@ -2,11 +2,12 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>software</type>
+  <os>windows</os>
   <category>internet_browser</category>
-  <name>google_chrome</name>
+  <name>firefox</name>
   <version>0.0.1</version>
-  <path>software/internet_browser/google_chrome</path>
-  <description>Installs the web browser google chrome</description>
+  <path>software/windows/internet_browser/firefox</path>
+  <description>Installs the web browser Firefox</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
 </software>

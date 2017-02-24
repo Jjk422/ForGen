@@ -2,10 +2,11 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>evidence</type>
+  <os>windows</os>
   <category>fraud</category>
   <name>business_invoice_1</name>
   <version></version>
-  <path>evidence/fraud/business_invoice_1</path>
+  <path>evidence/windows/fraud/business_invoice_1</path>
   <description>Installs notepad++</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>

@@ -77,62 +77,69 @@
         <!-- TODO: Ensure modules with path element are always selected -->
         <author>Jason Keighley</author>
         <type>software</type>
+        <os>windows</os>
         <category>languages</category>
         <name>ruby</name>
-        <path>software/languages/ruby</path>
+        <path>software/windows/languages/ruby</path>
         <description>Installs the ruby language</description>
       </module>
 
-      <!--<module>-->
+       <!--<module>-->
         <!--<author>Jason Keighley</author>-->
         <!--<type>forensics</type>-->
+        <!--<os>windows</os>-->
         <!--<category>timestamp</category>-->
         <!--<name>change_timestamp</name>-->
-        <!--<path>system/timestamp/change_timestamp</path>-->
+        <!--<path>system/windows/timestamp/change_timestamp</path>-->
         <!--<description></description>-->
       <!--</module>-->
 
       <!--<module>-->
         <!--<author>Jason Keighley</author>-->
         <!--<type>evidence</type>-->
+        <!--<os>windows</os>-->
         <!--<category>fraud</category>-->
         <!--<name>business_invoice_1</name>-->
-        <!--<path>evidence/fraud/business_invoice_1</path>-->
+        <!--<path>evidence/windows/fraud/business_invoice_1</path>-->
         <!--<description></description>-->
+      <!--</module>-->
+
+      <!--<module>-->
+        <!--<author>Jason Keighley</author>-->
+        <!--<type>software</type>-->
+        <!--<os>windows</os>-->
+        <!--<category>languages</category>-->
+        <!--<name>python</name>-->
+        <!--<path>software/windows/languages/ruby</path>-->
+        <!--<description></description>-->
+      <!--</module>-->
+
+      <!--<module>-->
+        <!--<author>Jason Keighley</author>-->
+        <!--<type>software</type>-->
+        <!--<os>windows</os>-->
+        <!--<category>internet_browser</category>-->
+        <!--<name></name>-->
+        <!--<version></version>-->
+        <!--<path></path>-->
+        <!--<description></description>-->
+      <!--</module>-->
+
+      <!--<module>-->
+        <!--<author>Jason Keighley</author>-->
+        <!--<type>software</type>-->
+        <!--<os>windows</os>-->
+        <!--<category>text_editor</category>-->
+        <!--<name>notepad++</name>-->
+        <!--<version></version>-->
+        <!--<path>software/text_editor/notepad++</path>-->
+        <!--<description>Installs notepad++</description>-->
       <!--</module>-->
 
       <module>
         <author>Jason Keighley</author>
-        <type>software</type>
-        <category>languages</category>
-        <name>python</name>
-        <path></path>
-        <description></description>
-      </module>
-
-      <module>
-        <author>Jason Keighley</author>
-        <type>software</type>
-        <category>internet_browser</category>
-        <name></name>
-        <version></version>
-        <path></path>
-        <description></description>
-      </module>
-
-      <module>
-        <author>Jason Keighley</author>
-        <type>software</type>
-        <category>text_editor</category>
-        <name>notepad++</name>
-        <version></version>
-        <path>software/text_editor/notepad++</path>
-        <description>Installs notepad++</description>
-      </module>
-
-      <module>
-        <author>Jason Keighley</author>
         <type>base</type>
+        <os>windows</os>
         <category>windows</category>
         <name>windows_server_2008_r2</name>
         <distro>server</distro>
@@ -146,10 +153,10 @@
         <!--<author>Jason Keighley</author>-->
         <!--<type>base</type>-->
         <!--<category>windows</category>-->
-        <!--<name></name>-->
+        <!--<name>windows_server_2008_r2</name>-->
         <!--<distro></distro>-->
         <!--<version>10</version>-->
-        <!--<path></path>-->
+        <!--<path>baseboxes/windows/windows_server_2008_r2</path>-->
         <!--<url></url>-->
         <!--<description></description>-->
       <!--</module>-->

@@ -2,10 +2,11 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>software</type>
+  <os>windows</os>
   <category>languages</category>
   <name>python</name>
   <version>0.0.1</version>
-  <path>software/languages/python</path>
+  <path>software/windows/languages/python</path>
   <description>Installs the python language</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
