@@ -6,6 +6,7 @@
       <xs:sequence>
         <xs:element name="author" minOccurs="1" maxOccurs="unbounded"/>
         <xs:element name="type" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="os" minOccurs="1" maxOccurs="1"/>
         <xs:element name="category" minOccurs="1" maxOccurs="1"/>
         <xs:element name="name" minOccurs="1" maxOccurs="1"/>
         <xs:element name="distro" minOccurs="1" maxOccurs="1"/>

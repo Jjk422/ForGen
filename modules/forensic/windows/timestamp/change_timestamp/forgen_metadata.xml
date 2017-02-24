@@ -1,11 +1,12 @@
 <forensic>
   <!-- Module information-->
   <author>Jason Keighley</author>
-  <type>system</type>
+  <type>forensic</type>
+  <os>windows</os>
   <category>timestamp</category>
   <name>change_timestamp</name>
   <version></version>
-  <path>forensic/timestamp/change_timestamp</path>
+  <path>forensic/windows/timestamp/change_timestamp</path>
   <description>Changes a files timestamp</description>
   <provider>Shell</provider>
   <manifest_file>init.pp</manifest_file>

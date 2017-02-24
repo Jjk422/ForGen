@@ -2,11 +2,11 @@
   <!-- Module information-->
   <author>Jason Keighley</author>
   <type>software</type>
-  <!--<os></os>-->
+  <os>windows</os>
   <category>text_editor</category>
   <name>notepad++</name>
   <version>0.0.1</version>
-  <path>software/text_editor/notepadplusplus</path>
+  <path>software/windows/text_editor/notepadplusplus</path>
   <description>Installs notepad++</description>
   <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
