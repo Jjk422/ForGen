@@ -11,16 +11,14 @@ class OutputGenerator
   #
   # @author Jason Keighley
   # @param [Hash] options Options hash containing all command line options
-  # @param [Hash] case_hash Contains all /case details
-  def initialize(options, case_hash)
+  # @param [String] case_xml Contains all /case details in xml format
+  def initialize(options, case_xml)
     @options = options
-    @case_details = case_hash
+    @case_details = case_xml
   end
 
   # Create the xml output file from the case details
   # stored in the hash @case_details
-  #
-  # Initialisation method for the OutputGenerator class
   #
   # @author Jason Keighley
   # @param [String] output_file_path File path for the created xml file
@@ -33,17 +31,4 @@ class OutputGenerator
       file.write(xml_result)
     end
   end
-
-  # # Create a test sheet containing questions to answer
-  # # that relate to the information on the generated
-  # # image file
-  # def create_test_output_file(test_output_file_path)
-  #
-  # end
-  #
-  # # Create a mark sheet containing the answers to
-  # # questions given in the test output file
-  # def create_mark_output_file(mark_output_file_path)
-  #
-  # end
 end

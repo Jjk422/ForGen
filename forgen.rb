@@ -15,6 +15,7 @@ require "#{DIR_CLASSES}/module_selector"
 require "#{DIR_CLASSES}/data_store"
 require "#{DIR_CLASSES}/output_generator"
 require "#{DIR_CLASSES}/template_generator"
+require "#{DIR_CLASSES}/test_generator"
 require "#{DIR_CLASSES}/xml_parse"
 
 # Method libraries
@@ -261,6 +262,17 @@ def make_configuration(options)
   # Generate XML output file
   @colour.notify 'Generating XML output file'
   outputGenerator.create_xml_output_file("#{options[:project_dir]}/CaseDetails.xml")
+
+  ## Test files
+  testGenerator = TestGenerator.new(options, case_hash)
+
+  # Generate test file
+  @colour.notify 'Generating Test output file'
+  testGenerator.create_test_output_file("#{options[:project_dir]}/TestFile.txt")
+
+  # Generate mark file
+  @colour.notify 'Generating Mark output file'
+  testGenerator.create_mark_output_file("#{options[:project_dir]}/MarkFile.txt")
 
   ## Create puppet module structure withing project directory using librarian-puppet
   @colour.notify "Creating Puppet module structure using librarian-puppet for project #{options[:project_dir].split('/').last} (This may take a while)"

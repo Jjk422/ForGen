@@ -1,3 +1,5 @@
+TODO: Make test sheets checking/comparison available via ForGen
+
 TODO: Make build and cleanup puppet modules populate dynamically.
 TODO: Make template copying dynamic in forgen.rb to accomidate other OS types/distros, linux, windows etc.
 
