@@ -5,6 +5,7 @@ require 'fileutils'
 require 'erb'
 require 'nokogiri'
 require 'nori'
+require 'json'
 
 # Constants libraries
 require_relative "lib/constants"
@@ -204,6 +205,8 @@ def make_configuration(options)
   dataStore.parse_case_hash
 
   options[:data_store] = dataStore.get_datastore
+  # @colour.error "options[:data_store]: #{options[:data_store]}"
+  # @colour.error "options[:data_store].to_json: #{options[:data_store].to_json}"
 
   ### Select Configuration modules
   # TODO: Make module selector create array hash structure for single modules in xml file ({:provisioner}=>[{"Module_name"}=>{Mod_info_1=>Mod_val_1, Mod_info_2=>Mod_val_2, Mod_info_3=>Mod_val_3}])
