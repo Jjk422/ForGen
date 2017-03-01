@@ -8,6 +8,6 @@
   <version></version>
   <path>forensic/windows/timestamp/change_timestamp</path>
   <description>Changes a files timestamp</description>
-  <provider>Shell</provider>
+  <provider>Puppet</provider>
   <manifest_file>init.pp</manifest_file>
 </forensic>
