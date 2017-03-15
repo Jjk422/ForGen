@@ -1,0 +1,13 @@
+<evidence>
+  <!-- Module information-->
+  <author>Jason Keighley</author>
+  <type>evidence</type>
+  <os>windows</os>
+  <category>cybercrime</category>
+  <name>internet_history_firefox</name>
+  <version></version>
+  <path>evidence/windows/cybercrime/internet_history_firefox</path>
+  <description>Creates firefox internet history</description>
+  <provider>Puppet</provider>
+  <manifest_file>init.pp</manifest_file>
+</evidence>

@@ -94,9 +94,9 @@ config.vm.provision "puppet" do | <%= module_name %> |
   <%= module_name %>.manifest_file = "<%= module_information[:manifest_file] %>"
   <%= module_name %>.manifests_path = "<%= @options[:project_dir] %>/modules/<%= module_name %>/manifests"
 
-  # puppet.facter = {
-  #     "data_store" => "<%= @options[:data_store] %>"
-  # }
+  puppet.facter = {
+      "data_store" => "<%= require 'json'; @options[:data_store].to_json %>"
+  }
 
       <% if @options.has_key? :verbose -%>
   <%= module_name %>.options = "--verbose"

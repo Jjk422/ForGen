@@ -104,6 +104,16 @@
         <!--<description></description>-->
       <!--</module>-->
 
+      <module>
+      <author>Jason Keighley</author>
+      <type>evidence</type>
+      <os>windows</os>
+      <category>cybercrime</category>
+      <name>internet_history</name>
+      <path>evidence/windows/fraud/business_invoice_1</path>
+      <description></description>
+      </module>
+
       <!--<module>-->
         <!--<author>Jason Keighley</author>-->
         <!--<type>software</type>-->
@@ -114,16 +124,16 @@
         <!--<description></description>-->
       <!--</module>-->
 
-      <!--<module>-->
-        <!--<author>Jason Keighley</author>-->
-        <!--<type>software</type>-->
-        <!--<os>windows</os>-->
-        <!--<category>internet_browser</category>-->
-        <!--<name></name>-->
-        <!--<version></version>-->
-        <!--<path></path>-->
-        <!--<description></description>-->
-      <!--</module>-->
+      <module>
+        <author>Jason Keighley</author>
+        <type>software</type>
+        <os>windows</os>
+        <category>internet_browser</category>
+        <name>firefox</name>
+        <version></version>
+        <path></path>
+        <description></description>
+      </module>
 
       <!--<module>-->
         <!--<author>Jason Keighley</author>-->

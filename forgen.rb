@@ -203,6 +203,10 @@ def make_configuration(options)
 
   dataStore.parse_case_hash
 
+  # Collect urls for internet artifact modules
+  dataStore.collect_urls_single('history','cybercrime', 10)
+  dataStore.collect_urls_single('history','noise', 10)
+
   options[:data_store] = dataStore.get_datastore
 
   ### Select Configuration modules

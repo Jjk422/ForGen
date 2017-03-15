@@ -54,6 +54,8 @@ class DataStore
   #     }
   #   }
 
+  require_relative '../../lib/constants.rb'
+
   # Initialisation method for the DataStore class
   #
   # @author Jason Keighley
@@ -83,6 +85,45 @@ class DataStore
           end
         end
       end
+    end
+  end
+
+  # Method to collect specified number of noise and crime urls into @datastore[:evidence][:url_cache][url_category][crime_type/noise]
+  #
+  # @author Jason Keighley
+  # @private
+  # @return [Void]
+  def collect_urls_multiple(url_category, crime_type, number_of_evidence_urls, number_of_noise_urls )
+    # @datastore[:evidence] = { :url_cache => { url_category.to_sym => crime_type.to_sym }} unless @datastore[:url_cache][url_category.to_sym].has_key? crime_type.to_sym
+
+    @datastore[:evidence] = Hash.new unless @datastore.has_key? :evidence
+    @datastore[:evidence] = { :url_cache => Hash.new } unless @datastore[:evidence].has_key? :url_cache
+    @datastore[:evidence][:url_cache].merge!({ url_category.to_sym => { crime_type.to_sym => Array.new, :noise => Array.new }})
+
+    File.open("#{DIR_DATA_STRUCTURES}/url_cache/#{url_category}/url_#{url_category}_#{crime_type}").each_with_index do | url, index |
+      @datastore[:evidence][:url_cache][url_category.to_sym][crime_type.to_sym] << url.tr("\n",'')
+      break if index > number_of_evidence_urls
+    end
+
+    File.open("#{DIR_DATA_STRUCTURES}/url_cache/#{url_category}/url_#{url_category}_noise").each_with_index do | url, index |
+      @datastore[:evidence][:url_cache][url_category.to_sym][:noise] << url.tr("\n",'')
+      break if index > number_of_noise_urls
+    end
+  end
+
+  # Method to collect specified number urls into @datastore[:evidence][:url_cache][url_category][crime_type]
+  #
+  # @author Jason Keighley
+  # @private
+  # @return [Void]
+  def collect_urls_single(url_category, crime_type, number_of_urls_to_collect )
+    @datastore[:evidence] = Hash.new unless @datastore.has_key? :evidence
+    @datastore[:evidence] = { :url_cache => Hash.new } unless @datastore[:evidence].has_key? :url_cache
+    @datastore[:evidence][:url_cache].merge!({ url_category.to_sym => { crime_type.to_sym => Array.new, :noise => Array.new }})
+
+    File.open("#{DIR_DATA_STRUCTURES}/url_cache/#{url_category}/url_#{url_category}_#{crime_type}").each_with_index do | url, index |
+      @datastore[:evidence][:url_cache][url_category.to_sym][crime_type.to_sym] << url.tr("\n",'')
+      break if index > number_of_urls_to_collect
     end
   end
 
