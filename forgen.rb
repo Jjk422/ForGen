@@ -344,7 +344,7 @@ def create_dd_image(drive_path, image_output_location)
   ## Make DD image
   @colour.notify "Creating dd image with path #{image_output_location}.raw"
   @colour.notify 'This may take a while:'
-  @colour.notify "Raw image #{image_output_location}.raw created" if system "aBoxManage clonemedium disk '#{drive_path}' '#{image_output_location}.raw' --format RAW"
+  @colour.notify "Raw image #{image_output_location}.raw created" if system "VBoxManage clonemedium disk '#{drive_path}' '#{image_output_location}.raw' --format RAW"
 end
 
 # Delete virtualbox virtual machine
